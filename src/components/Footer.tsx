@@ -4,14 +4,14 @@ import { ExternalLink } from 'lucide-react'
 
 export default function Footer() {
   return (
-    <footer className="mt-12 pt-8 border-t border-terminal-gray/20">
+    <footer className="mt-12 pt-8">
       <div className="text-center space-y-2 text-sm text-terminal-gray">
         <div className="flex items-center justify-center gap-2">
           <span>Pulsa</span>
           <kbd className="px-2 py-1 bg-terminal-gray/10 border border-terminal-gray/20 rounded text-xs">
             Cmd+W
           </kbd>
-          <span>para salir (se cerrará la ventana)</span>
+          <span>para salir</span>
         </div>
         
         <div className="flex items-center justify-center gap-1">

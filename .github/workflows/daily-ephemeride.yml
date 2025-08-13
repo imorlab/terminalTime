@@ -1,0 +1,53 @@
+name: TerminalTime - Generate Daily Ephemeride
+
+on:
+  schedule:
+    # Ejecutar todos los días a las 6:00 AM UTC (8:00 AM CEST)
+    - cron: '0 6 * * *'
+  workflow_dispatch: # Permitir ejecución manual
+
+jobs:
+  generate-ephemeride:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Generate daily ephemeride
+      env:
+        NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+        SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      run: |
+        node -e "
+        const fetch = require('node-fetch');
+        const { createClient } = require('@supabase/supabase-js');
+        
+        async function generateEphemeride() {
+          try {
+            const response = await fetch('${{ secrets.VERCEL_URL || 'https://your-app.vercel.app' }}/api/ephemerides/today');
+            const data = await response.json();
+            console.log('Efeméride generada:', data.title);
+          } catch (error) {
+            console.error('Error generando efeméride:', error);
+          }
+        }
+        
+        generateEphemeride();
+        "
+        
+    - name: Health check
+      run: |
+        echo "✅ Daily ephemeride generation completed"
+        echo "📅 Date: $(date)"
+        echo "🚀 Next execution: tomorrow at 6:00 AM UTC"

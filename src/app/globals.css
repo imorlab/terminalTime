@@ -1,0 +1,81 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap');
+
+@layer base {
+  * {
+    @apply border-terminal-gray/20;
+  }
+  
+  body {
+    @apply bg-terminal-bg text-terminal-text font-mono antialiased;
+  }
+  
+  ::-webkit-scrollbar {
+    @apply w-1;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-terminal-bg;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-terminal-gray/50 rounded;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-terminal-gray/70;
+  }
+}
+
+@layer components {
+  .terminal-window {
+    @apply bg-terminal-bg border border-terminal-gray/30 rounded-lg shadow-2xl;
+  }
+  
+  .terminal-header {
+    @apply flex items-center gap-2 px-4 py-3 bg-terminal-gray/10 border-b border-terminal-gray/30 rounded-t-lg;
+  }
+  
+  .terminal-dot {
+    @apply w-3 h-3 rounded-full;
+  }
+  
+  .terminal-content {
+    @apply p-6 space-y-4;
+  }
+  
+  .command-line {
+    @apply flex items-center gap-2 text-terminal-green;
+  }
+  
+  .command-prompt {
+    @apply text-terminal-blue;
+  }
+  
+  .command-text {
+    @apply text-terminal-text;
+  }
+  
+  .output-line {
+    @apply ml-4 text-terminal-gray;
+  }
+  
+  .highlight-text {
+    @apply text-terminal-yellow font-medium;
+  }
+  
+  .error-text {
+    @apply text-terminal-red;
+  }
+  
+  .success-text {
+    @apply text-terminal-green;
+  }
+  
+  .info-text {
+    @apply text-terminal-blue;
+  }
+}

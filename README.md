@@ -1,15 +1,18 @@
 # TerminalTime ⏰
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fimorlab%2FterminalTime)
+
 Historia de la programación en tu terminal. Una aplicación web que muestra efemérides de programación, noticias tech y información del clima en una interfaz terminal minimalista.
 
 ## ✨ Características
 
 - **🗓️ Historia Diaria**: Efemérides de programación y tecnología para cada día
-- **🌤️ Información del Clima**: Datos meteorológicos en tiempo real con geolocalización
-- **📰 Noticias Tech**: Las últimas noticias del mundo de la tecnología y programación
+- **🌤️ Información del Clima**: Datos meteorológicos en tiempo real con geolocalización  
+- **📰 Noticias Tech en Español**: Últimas noticias de tecnología con RSS y contenido curado
 - **💻 Interfaz Terminal**: UI minimalista que simula una terminal de comandos
-- **🚀 Generación Automática**: Creación automática de contenido usando IA
+- **🤖 IA con DeepSeek**: Generación automática de efemérides personalizadas
 - **📱 Responsive**: Diseño adaptativo para todos los dispositivos
+- **🔄 Auto-refresh**: Las efemérides se actualizan automáticamente cada día
 
 ## 🎯 Tagline
 > "Historia de la programación en tu terminal"
@@ -18,27 +21,42 @@ Historia de la programación en tu terminal. Una aplicación web que muestra efe
 
 - **Frontend**: Next.js 15, React 18, TypeScript
 - **Estilos**: Tailwind CSS con tema terminal personalizado
-- **Base de datos**: Supabase (PostgreSQL)
-- **APIs**: OpenAI, OpenWeatherMap, NewsAPI
+- **Base de datos**: Supabase (PostgreSQL) - Opcional
+- **APIs**: DeepSeek AI, Open-Meteo (clima), Menéame RSS (noticias)
 - **Iconos**: Lucide React
 - **Despliegue**: Vercel
 - **CI/CD**: GitHub Actions
 
-## 🚀 Inicio Rápido
+## 🚀 Despliegue Rápido
+
+### ⚡ Deploy en 1 click
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fimorlab%2FterminalTime)
+
+### 🔑 Variables de entorno necesarias
+
+Solo necesitas **una variable** para funcionalidad completa:
+
+```bash
+DEEPSEEK_API_KEY=tu_deepseek_api_key_aqui
+```
+
+**¿Sin API key?** ¡No problem! La app funciona con contenido de ejemplo.
+
+## 🏃‍♂️ Desarrollo Local
 
 ### Prerrequisitos
 
 - Node.js 18+ 
 - npm o yarn
-- Cuenta en Supabase
-- API Keys para OpenAI, OpenWeatherMap y NewsAPI
+- API Key de DeepSeek (opcional)
 
 ### Instalación
 
 1. **Clona el repositorio**
    ```bash
-   git clone https://github.com/tu-usuario/terminaltime.git
-   cd terminaltime
+   git clone https://github.com/imorlab/terminalTime.git
+   cd terminalTime
    ```
 
 2. **Instala dependencias**

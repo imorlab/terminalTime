@@ -140,8 +140,8 @@ export default function NewsSection() {
       </div>
       
       {error && (
-        <div className="text-terminal-red text-xs mt-3 border-t border-terminal-gray/10 pt-3">
-          ⚠️ Mostrando noticias de ejemplo (API no disponible)
+        <div className="text-terminal-yellow text-xs mt-3 border-t border-terminal-gray/10 pt-3">
+          ⚡ Usando noticias curadas + Hacker News
         </div>
       )}
     </div>

@@ -1,40 +1,61 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+// Solo crear cliente de Supabase si las variables están disponibles
+let supabase: any = null
+if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  const { createClient } = require('@supabase/supabase-js')
+  supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  )
+}
 
 export async function GET() {
   try {
     const today = new Date()
     const todayString = today.toISOString().split('T')[0]
     
-    // Intentar obtener efeméride del día actual
-    let { data: ephemeride, error } = await supabase
-      .from('ephemerides')
-      .select('*')
-      .eq('date', todayString)
-      .single()
+    let ephemeride = null
+
+    // Solo intentar base de datos si Supabase está configurado
+    if (supabase) {
+      try {
+        const { data, error } = await supabase
+          .from('ephemerides')
+          .select('*')
+          .eq('date', todayString)
+          .single()
+        
+        if (!error && data) {
+          ephemeride = data
+        }
+      } catch (dbError) {
+        console.log('DB no disponible, usando generación:', dbError)
+      }
+    }
     
-    if (error || !ephemeride) {
-      // Si no hay efeméride para hoy, generar una nueva
+    if (!ephemeride) {
+      // Si no hay efeméride en DB, generar una nueva
       const generatedEphemeride = await generateTodayEphemeride()
       
       if (generatedEphemeride) {
-        // Guardar en la base de datos
-        const { data: newEphemeride, error: insertError } = await supabase
-          .from('ephemerides')
-          .insert([generatedEphemeride])
-          .select()
-          .single()
+        ephemeride = generatedEphemeride
         
-        if (!insertError && newEphemeride) {
-          ephemeride = newEphemeride
-        } else {
-          // Si falla guardar, devolver la generada
-          ephemeride = generatedEphemeride
+        // Solo guardar en DB si Supabase está disponible
+        if (supabase) {
+          try {
+            const { data: newEphemeride, error: insertError } = await supabase
+              .from('ephemerides')
+              .insert([generatedEphemeride])
+              .select()
+              .single()
+            
+            if (!insertError && newEphemeride) {
+              ephemeride = newEphemeride
+            }
+          } catch (saveError) {
+            console.log('No se pudo guardar en DB:', saveError)
+          }
         }
       } else {
         // Fallback: devolver una efeméride de ejemplo
@@ -61,7 +82,14 @@ export async function GET() {
 }
 
 async function generateTodayEphemeride() {
-  if (!process.env.OPENAI_API_KEY) {
+  // Priorizar DeepSeek sobre OpenAI
+  const apiKey = process.env.DEEPSEEK_API_KEY || process.env.OPENAI_API_KEY
+  const apiUrl = process.env.DEEPSEEK_API_KEY 
+    ? 'https://api.deepseek.com/v1/chat/completions'
+    : 'https://api.openai.com/v1/chat/completions'
+  const model = process.env.DEEPSEEK_API_KEY ? 'deepseek-chat' : 'gpt-4'
+  
+  if (!apiKey) {
     return null
   }
   
@@ -70,14 +98,14 @@ async function generateTodayEphemeride() {
     const month = today.toLocaleDateString('es-ES', { month: 'long' })
     const day = today.getDate()
     
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4',
+        model: model,
         messages: [
           {
             role: 'system',
@@ -100,7 +128,7 @@ async function generateTodayEphemeride() {
     })
     
     if (!response.ok) {
-      throw new Error('Error en la API de OpenAI')
+      throw new Error(`Error en la API de ${process.env.DEEPSEEK_API_KEY ? 'DeepSeek' : 'OpenAI'}`)
     }
     
     const data = await response.json()

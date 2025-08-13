@@ -17,15 +17,31 @@ export default function EphemerideSection() {
   const [ephemeride, setEphemeride] = useState<Ephemeride | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [currentDate, setCurrentDate] = useState<string>('')
 
   useEffect(() => {
     fetchTodayEphemeride()
-  }, [])
+    
+    // Verificar cada minuto si cambió el día
+    const interval = setInterval(() => {
+      const today = new Date().toISOString().split('T')[0]
+      if (currentDate && currentDate !== today) {
+        console.log('📅 Nuevo día detectado, refrescando efeméride...')
+        fetchTodayEphemeride()
+      }
+    }, 60000) // Verificar cada minuto
+    
+    return () => clearInterval(interval)
+  }, [currentDate])
 
   const fetchTodayEphemeride = async () => {
     try {
       setLoading(true)
       setError(null)
+      
+      // Actualizar fecha actual
+      const today = new Date().toISOString().split('T')[0]
+      setCurrentDate(today)
       
       const response = await fetch('/api/ephemerides/today')
       
@@ -39,9 +55,11 @@ export default function EphemerideSection() {
       console.log('Error API efemérides:', err)
       setError('API no disponible')
       // Mostrar datos de ejemplo mientras no tengamos la API
+      const today = new Date().toISOString().split('T')[0]
+      setCurrentDate(today)
       setEphemeride({
         id: '1',
-        date: new Date().toISOString().split('T')[0],
+        date: today,
         title: 'Lanzamiento de JavaScript',
         description: 'En 1995, Brendan Eich creó JavaScript en tan solo 10 días mientras trabajaba en Netscape Communications. Originalmente llamado "Mocha", luego "LiveScript", finalmente se convirtió en JavaScript. Este lenguaje revolucionaría el desarrollo web y se convertiría en uno de los lenguajes de programación más utilizados del mundo.',
         year: 1995,
@@ -87,6 +105,9 @@ export default function EphemerideSection() {
     <div className="space-y-6">
       <div className="output-line text-terminal-green">
         📅 Efeméride del día cargada exitosamente
+        <span className="text-terminal-gray text-sm ml-2">
+          (se actualiza automáticamente cada día)
+        </span>
       </div>
       
       {ephemeride && (

@@ -149,8 +149,8 @@ export default function WeatherSection() {
       )}
       
       {error && (
-        <div className="text-terminal-red text-xs mt-2">
-          ⚠️ Usando datos de ejemplo
+        <div className="text-terminal-yellow text-xs mt-2">
+          ⚡ Usando Open-Meteo (servicio público)
         </div>
       )}
     </div>

@@ -7,6 +7,7 @@ import EphemerideSection from '@/components/EphemerideSection'
 import WeatherSection from '@/components/WeatherSection'
 import NewsSection from '@/components/NewsSection'
 import LoadingSpinner from '@/components/LoadingSpinner'
+import Footer from '@/components/Footer'
 
 export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true)
@@ -57,6 +58,8 @@ export default function HomePage() {
               </div>
             </div>
           </div>
+          
+          <Footer />
         </div>
       </div>
     </div>

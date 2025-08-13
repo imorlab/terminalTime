@@ -4,6 +4,16 @@
 
 Historia de la programación en tu terminal. Una aplicación web que muestra efemérides de programación, noticias tech y información del clima en una interfaz terminal minimalista.
 
+## 🌐 **APLICACIÓN LIVE**
+
+🚀 **URL Principal**: https://terminal-time-4lxsbsxsw-imorlabs-projects.vercel.app
+
+📱 **URLs Importantes**:
+- **🌍 Aplicación**: https://terminal-time-4lxsbsxsw-imorlabs-projects.vercel.app
+- **🔍 Dashboard**: https://vercel.com/imorlabs-projects/terminal-time/wn5hCN32omHP8jZSrW2D9drLepkA
+- **⚙️ Settings**: https://vercel.com/imorlabs-projects/terminal-time/settings
+- **📊 Analytics**: https://vercel.com/imorlabs-projects/terminal-time/analytics
+
 ## ✨ Características
 
 - **🗓️ Historia Diaria**: Efemérides de programación y tecnología para cada día
@@ -32,6 +42,9 @@ Historia de la programación en tu terminal. Una aplicación web que muestra efe
 ### ⚡ Deploy en 1 click
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fimorlab%2FterminalTime)
+
+### 🌍 **O visita la aplicación live:**
+**https://terminal-time-4lxsbsxsw-imorlabs-projects.vercel.app**
 
 ### 🔑 Variables de entorno necesarias
 
@@ -207,6 +220,28 @@ Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
 ## 👥 Autor
 
 Creado con ❤️ para la comunidad dev
+
+## 🔗 Links Importantes
+
+### 🌐 **Aplicación Live**
+- **Principal**: https://terminal-time-4lxsbsxsw-imorlabs-projects.vercel.app
+- **Status**: ✅ Online y funcionando
+
+### 🛠️ **Administración**
+- **Dashboard Vercel**: https://vercel.com/imorlabs-projects/terminal-time/wn5hCN32omHP8jZSrW2D9drLepkA
+- **Settings**: https://vercel.com/imorlabs-projects/terminal-time/settings
+- **Analytics**: https://vercel.com/imorlabs-projects/terminal-time/analytics
+- **Deployments**: https://vercel.com/imorlabs-projects/terminal-time/deployments
+
+### 📚 **Desarrollo**
+- **Repositorio**: https://github.com/imorlab/terminalTime
+- **Issues**: https://github.com/imorlab/terminalTime/issues
+- **Pull Requests**: https://github.com/imorlab/terminalTime/pulls
+
+### 🔧 **APIs Utilizadas**
+- **DeepSeek**: https://platform.deepseek.com/
+- **Open-Meteo**: https://open-meteo.com/
+- **Menéame RSS**: https://www.meneame.net/rss2.php
 
 ---
 

@@ -17,12 +17,15 @@ Historia de la programación en tu terminal. Una aplicación web que muestra efe
 ## ✨ Características
 
 - **🗓️ Historia Diaria**: Efemérides de programación y tecnología para cada día
-- **🌤️ Información del Clima**: Datos meteorológicos en tiempo real con geolocalización  
-- **📰 Noticias Tech en Español**: Últimas noticias de tecnología con RSS y contenido curado
-- **💻 Interfaz Terminal**: UI minimalista que simula una terminal de comandos
+- **🌤️ Clima Inteligente**: Selector de 30 ciudades españolas con datos meteorológicos en tiempo real
+- **📰 Noticias Tech**: Grid de 3 columnas responsivo con últimas noticias de tecnología
+- **💻 Interfaz Terminal Moderna**: UI glassmorphism que simula una terminal con efectos visuales
 - **🤖 IA con DeepSeek**: Generación automática de efemérides personalizadas
-- **📱 Responsive**: Diseño adaptativo para todos los dispositivos
+- **📱 Diseño Responsivo**: Layout adaptativo - 1 columna móvil, 2 tablet, 3 desktop
+- **🎨 Efectos Visuales**: Hover effects, transiciones suaves y micro-animaciones
 - **🔄 Auto-refresh**: Las efemérides se actualizan automáticamente cada día
+- **🏙️ Selector de Ciudades**: Dropdown elegante con 30 ciudades principales de España
+- **⚡ Mock Data**: Funcionalidad completa incluso sin APIs configuradas
 
 ## 🎯 Tagline
 > "Historia de la programación en tu terminal"
@@ -30,10 +33,10 @@ Historia de la programación en tu terminal. Una aplicación web que muestra efe
 ## 🛠️ Stack Tecnológico
 
 - **Frontend**: Next.js 15, React 18, TypeScript
-- **Estilos**: Tailwind CSS con tema terminal personalizado
+- **Estilos**: Tailwind CSS con tema terminal personalizado + efectos glassmorphism
 - **Base de datos**: Supabase (PostgreSQL) - Opcional
 - **APIs**: DeepSeek AI, Open-Meteo (clima), Menéame RSS (noticias)
-- **Iconos**: Lucide React
+- **Iconos**: Lucide React con animaciones
 - **Despliegue**: Vercel
 - **CI/CD**: GitHub Actions
 
@@ -84,10 +87,15 @@ DEEPSEEK_API_KEY=tu_deepseek_api_key_aqui
    
    Edita `.env.local` con tus API keys:
    ```env
+   # IA para generación de efemérides (recomendado)
+   DEEPSEEK_API_KEY=tu_deepseek_api_key_aqui
+   
+   # Base de datos (opcional - funciona con mock data)
    NEXT_PUBLIC_SUPABASE_URL=tu_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_supabase_anon_key
    SUPABASE_SERVICE_ROLE_KEY=tu_supabase_service_role_key
-   OPENAI_API_KEY=tu_openai_api_key
+   
+   # APIs externas (opcional - tiene fallbacks)
    OPENWEATHER_API_KEY=tu_openweather_api_key
    NEWS_API_KEY=tu_news_api_key
    ```
@@ -132,16 +140,18 @@ src/
 │   ├── TerminalHeader.tsx      # Header de la terminal
 │   ├── CommandLine.tsx         # Línea de comandos
 │   ├── EphemerideSection.tsx   # Sección de efemérides
-│   ├── WeatherSection.tsx      # Sección del clima
-│   ├── NewsSection.tsx         # Sección de noticias
-│   └── LoadingSpinner.tsx      # Spinner de carga
+│   ├── WeatherSection.tsx      # Sección del clima con selector de ciudades
+│   ├── NewsSection.tsx         # Grid de noticias en 3 columnas
+│   ├── LoadingSpinner.tsx      # Spinner de carga
+│   └── Footer.tsx              # Footer de la aplicación
 ```
 
-## 🎨 Tema Terminal
+## 🎨 Tema Terminal Moderno
 
-El proyecto usa un tema personalizado que simula una terminal:
+El proyecto usa un tema personalizado que simula una terminal moderna con efectos glassmorphism:
 
 ```css
+/* Colores principales */
 terminal-bg: #0d1117      /* Fondo principal */
 terminal-text: #f0f6fc    /* Texto principal */
 terminal-green: #7ce38b   /* Verde terminal */
@@ -149,23 +159,68 @@ terminal-blue: #58a6ff    /* Azul terminal */
 terminal-yellow: #f2cc60  /* Amarillo terminal */
 terminal-red: #f85149     /* Rojo terminal */
 terminal-gray: #8b949e    /* Gris terminal */
+
+/* Efectos modernos */
+backdrop-blur-sm          /* Efecto glassmorphism */
+bg-gradient-to-br         /* Gradientes sutiles */
+hover:border-terminal-green/30  /* Hover effects */
+transition-all duration-300     /* Transiciones suaves */
 ```
 
-## 🔧 APIs Utilizadas
+### 🎭 Componentes Estilizados
 
-### OpenAI
-- Generación automática de efemérides
-- Endpoint: `https://api.openai.com/v1/chat/completions`
+- **WeatherSection**: Glassmorphism con animaciones de hover
+- **NewsSection**: Grid responsivo con cards individuales
+- **EphemerideSection**: Layout integrado con mejor tipografía
+- **Dropdowns**: Efectos de hover y transiciones elegantes
 
-### OpenWeatherMap
-- Datos meteorológicos en tiempo real
-- Endpoint: `https://api.openweathermap.org/data/2.5/weather`
+## 🔧 APIs y Servicios
 
-### NewsAPI
-- Noticias de tecnología
-- Endpoint: `https://newsapi.org/v2/everything`
+### 🧠 DeepSeek AI
+- Generación automática de efemérides personalizadas
+- Endpoint: `https://api.deepseek.com/chat/completions`
+- Fallback: Contenido curado estático
+
+### 🌤️ Open-Meteo (Clima)
+- Datos meteorológicos gratuitos y precisos
+- Endpoint: `https://api.open-meteo.com/v1/forecast`
+- Soporte para 30 ciudades españolas
+
+### 📰 Menéame RSS (Noticias)
+- Noticias tech en español curadas por la comunidad
+- Endpoint: `https://www.meneame.net/rss2.php`
+- Contenido local y relevante
+
+### 🏙️ Ciudades Soportadas
+
+El selector de clima incluye estas ciudades españolas:
+
+**Principales**: Madrid, Barcelona, Valencia, Sevilla, Zaragoza, Málaga
+**Costa**: Alicante, Las Palmas, Palma, Santander, A Coruña
+**Norte**: Bilbao, San Sebastián, Gijón, Vitoria, Pamplona
+**Interior**: Toledo, Salamanca, León, Burgos, Logroño, Badajoz
+**Sur**: Granada, Córdoba, Cádiz, Huelva, Murcia, Albacete
 
 ## 🚀 Despliegue
+
+### ✨ Últimas Mejoras (v2.0)
+
+**🎨 UI/UX Modernizado:**
+- Nuevo diseño glassmorphism en WeatherSection
+- Grid responsivo de 3 columnas para noticias
+- Efectos hover y micro-animaciones
+- Selector de ciudades españolas con dropdown elegante
+
+**📱 Responsividad Mejorada:**
+- Layout optimizado para móvil, tablet y desktop
+- NewsSection independiente con mejor distribución
+- Grid adaptativo: 1 col → 2 cols → 3 cols
+
+**🌍 Funcionalidades Nuevas:**
+- 30 ciudades españolas con coordenadas precisas
+- Mock data inteligente cuando APIs no disponibles
+- Mejor integración de títulos y metadata
+- Performance optimizada con useCallback
 
 ### Vercel (Recomendado)
 
@@ -187,13 +242,26 @@ on:
 
 ## 📊 Características Técnicas
 
-- **SSR y SSG**: Optimizado para SEO
+- **SSR y SSG**: Optimizado para SEO y performance
 - **API Routes**: Backend integrado con Next.js
 - **TypeScript**: Tipado fuerte en todo el proyecto
-- **Responsive Design**: Mobile-first approach
-- **Progressive Enhancement**: Funciona sin JavaScript
-- **Error Handling**: Manejo robusto de errores
-- **Loading States**: Estados de carga elegantes
+- **Responsive Design**: Mobile-first con breakpoints inteligentes
+- **Progressive Enhancement**: Funciona completamente sin JavaScript
+- **Error Handling**: Manejo robusto con fallbacks elegantes
+- **Loading States**: Skeleton loaders y animaciones de carga
+- **Glassmorphism UI**: Efectos visuales modernos con CSS
+- **Grid Layouts**: Responsivo 1→2→3 columnas según dispositivo
+- **Micro-interactions**: Hover effects y transiciones suaves
+- **City Selector**: Dropdown con 30 ciudades españolas
+- **Mock Data**: Funcionalidad completa sin dependencia de APIs externas
+
+### 🎯 Optimizaciones de UX
+
+- **Hover States**: Feedback visual en todos los elementos interactivos
+- **Smooth Transitions**: Transiciones de 300ms para fluidez
+- **Visual Hierarchy**: Tipografía y espaciado optimizado
+- **Color Psychology**: Colores terminal que reducen fatiga visual
+- **Accessibility**: Contrastes y tamaños de fuente accesibles
 
 ## 🤝 Contribuir
 

@@ -12,6 +12,10 @@ if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KE
 
 export async function GET() {
   try {
+    console.log('🔑 DEEPSEEK_API_KEY disponible:', !!process.env.DEEPSEEK_API_KEY)
+    console.log('� DEEPSEEK_API_KEY length:', process.env.DEEPSEEK_API_KEY?.length || 0)
+    console.log('�📅 Generando efeméride para:', new Date().toISOString().split('T')[0])
+    
     const today = new Date()
     const todayString = today.toISOString().split('T')[0]
     
@@ -36,9 +40,11 @@ export async function GET() {
     
     if (!ephemeride) {
       // Si no hay efeméride en DB, generar una nueva
+      console.log('💡 Intentando generar efeméride con IA...')
       const generatedEphemeride = await generateTodayEphemeride()
       
       if (generatedEphemeride) {
+        console.log('✅ Efeméride generada con IA exitosamente')
         ephemeride = generatedEphemeride
         
         // Solo guardar en DB si Supabase está disponible
@@ -58,6 +64,7 @@ export async function GET() {
           }
         }
       } else {
+        console.log('⚠️ Usando fallback: No se pudo generar con IA')
         // Fallback: devolver una efeméride de ejemplo
         ephemeride = {
           id: 'example-1',
@@ -89,7 +96,11 @@ async function generateTodayEphemeride() {
     : 'https://api.openai.com/v1/chat/completions'
   const model = process.env.DEEPSEEK_API_KEY ? 'deepseek-chat' : 'gpt-4'
   
+  console.log('🔑 API Key disponible:', !!apiKey)
+  console.log('🌐 Using API:', process.env.DEEPSEEK_API_KEY ? 'DeepSeek' : 'OpenAI')
+  
   if (!apiKey) {
+    console.log('❌ No API key disponible')
     return null
   }
   
@@ -128,10 +139,12 @@ async function generateTodayEphemeride() {
     })
     
     if (!response.ok) {
-      throw new Error(`Error en la API de ${process.env.DEEPSEEK_API_KEY ? 'DeepSeek' : 'OpenAI'}`)
+      console.log('❌ Error en API response:', response.status, response.statusText)
+      throw new Error(`Error en la API de ${process.env.DEEPSEEK_API_KEY ? 'DeepSeek' : 'OpenAI'}: ${response.status}`)
     }
     
     const data = await response.json()
+    console.log('✅ Respuesta de API recibida:', !!data.choices?.[0]?.message?.content)
     const content = data.choices[0]?.message?.content
     
     if (!content) {

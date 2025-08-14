@@ -104,10 +104,7 @@ export default function EphemerideSection() {
   return (
     <div className="space-y-6">
       <div className="output-line text-terminal-green">
-        📅 Efeméride del día cargada exitosamente
-        <span className="text-terminal-gray text-sm ml-2">
-          (se actualiza automáticamente cada día)
-        </span>
+        📅 Efeméride del día
       </div>
       
       {ephemeride && (

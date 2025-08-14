@@ -6,10 +6,10 @@ Historia de la programación en tu terminal. Una aplicación web que muestra efe
 
 ## 🌐 **APLICACIÓN LIVE**
 
-🚀 **URL Principal**: https://terminal-time-4lxsbsxsw-imorlabs-projects.vercel.app
+🚀 **URL Principal**: https://terminal-time.vercel.app
 
 📱 **URLs Importantes**:
-- **🌍 Aplicación**: https://terminal-time-4lxsbsxsw-imorlabs-projects.vercel.app
+- **🌍 Aplicación**: https://terminal-time.vercel.app
 - **🔍 Dashboard**: https://vercel.com/imorlabs-projects/terminal-time/wn5hCN32omHP8jZSrW2D9drLepkA
 - **⚙️ Settings**: https://vercel.com/imorlabs-projects/terminal-time/settings
 - **📊 Analytics**: https://vercel.com/imorlabs-projects/terminal-time/analytics
@@ -44,7 +44,7 @@ Historia de la programación en tu terminal. Una aplicación web que muestra efe
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fimorlab%2FterminalTime)
 
 ### 🌍 **O visita la aplicación live:**
-**https://terminal-time-4lxsbsxsw-imorlabs-projects.vercel.app**
+**https://terminal-time.vercel.app**
 
 ### 🔑 Variables de entorno necesarias
 

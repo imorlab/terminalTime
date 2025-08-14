@@ -97,7 +97,9 @@ async function generateTodayEphemeride() {
   const model = process.env.DEEPSEEK_API_KEY ? 'deepseek-chat' : 'gpt-4'
   
   console.log('🔑 API Key disponible:', !!apiKey)
+  console.log('🔑 API Key length:', apiKey?.length || 0)
   console.log('🌐 Using API:', process.env.DEEPSEEK_API_KEY ? 'DeepSeek' : 'OpenAI')
+  console.log('🤖 Model:', model)
   
   if (!apiKey) {
     console.log('❌ No API key disponible')
@@ -139,8 +141,10 @@ async function generateTodayEphemeride() {
     })
     
     if (!response.ok) {
+      const errorText = await response.text()
       console.log('❌ Error en API response:', response.status, response.statusText)
-      throw new Error(`Error en la API de ${process.env.DEEPSEEK_API_KEY ? 'DeepSeek' : 'OpenAI'}: ${response.status}`)
+      console.log('❌ Error details:', errorText)
+      throw new Error(`Error en la API de ${process.env.DEEPSEEK_API_KEY ? 'DeepSeek' : 'OpenAI'}: ${response.status} - ${errorText}`)
     }
     
     const data = await response.json()

@@ -77,15 +77,26 @@ export default function NewsSection() {
 
   if (loading) {
     return (
-      <div className="bg-terminal-gray/5 border border-terminal-gray/20 rounded-lg p-4">
-        <div className="output-line text-terminal-blue mb-3">
-          📰 Cargando noticias tech...
+      <div className="space-y-6">
+        {/* Título arriba */}
+        <div className="text-center">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <Newspaper className="h-6 w-6 text-terminal-blue" />
+            <h2 className="text-xl font-light text-terminal-green font-mono">tech.query</h2>
+          </div>
+          <div className="text-terminal-gray text-sm">Cargando últimas noticias...</div>
         </div>
-        <div className="space-y-3">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="animate-pulse">
-              <div className="h-3 bg-terminal-gray/20 rounded w-3/4 mb-1"></div>
-              <div className="h-3 bg-terminal-gray/20 rounded w-1/2"></div>
+
+        {/* Grid de 3 columnas - Loading */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="bg-terminal-gray/5 border border-terminal-gray/20 rounded-lg p-4">
+              <div className="animate-pulse space-y-3">
+                <div className="h-4 bg-terminal-gray/20 rounded w-3/4"></div>
+                <div className="h-3 bg-terminal-gray/20 rounded w-full"></div>
+                <div className="h-3 bg-terminal-gray/20 rounded w-2/3"></div>
+                <div className="h-3 bg-terminal-gray/20 rounded w-1/2"></div>
+              </div>
             </div>
           ))}
         </div>
@@ -94,54 +105,70 @@ export default function NewsSection() {
   }
 
   return (
-    <div className="bg-terminal-gray/5 border border-terminal-gray/20 rounded-lg p-4">
-      <div className="output-line text-terminal-green mb-4">
-        📰 Noticias Tech del día
+    <div className="space-y-6">
+      {/* Título arriba */}
+      <div className="text-center">
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <Newspaper className="h-6 w-6 text-terminal-blue" />
+          <h2 className="text-xl font-light text-terminal-green font-mono">tech.news</h2>
+        </div>
+        <div className="text-terminal-gray text-sm">Últimas noticias de tecnología</div>
       </div>
-      
-      <div className="space-y-4">
-        {news.slice(0, 3).map((article, index) => (
-          <div key={index} className="border-b border-terminal-gray/10 last:border-b-0 pb-3 last:pb-0">
-            <div className="flex items-start gap-2 mb-2">
-              <Newspaper className="h-4 w-4 text-terminal-blue flex-shrink-0 mt-0.5" />
-              <div className="flex-1 min-w-0">
-                <h4 className="text-sm font-medium text-terminal-yellow leading-tight mb-1">
-                  {article.title}
-                </h4>
-                <p className="text-xs text-terminal-gray leading-relaxed mb-2">
-                  {article.description.length > 100 
-                    ? `${article.description.slice(0, 100)}...` 
-                    : article.description
-                  }
-                </p>
-                <div className="flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-2 text-terminal-gray">
-                    <Clock className="h-3 w-3" />
-                    <span>{formatTimeAgo(article.publishedAt)}</span>
-                    <span>•</span>
-                    <span>{article.source}</span>
-                  </div>
-                  {article.url !== '#' && (
-                    <a 
-                      href={article.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-terminal-blue hover:text-terminal-yellow transition-colors"
-                    >
-                      <ExternalLink className="h-3 w-3" />
-                      <span>Leer</span>
-                    </a>
-                  )}
+
+      {/* Grid de 3 columnas */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {news.slice(0, 6).map((article, index) => (
+          <div key={index} className="group bg-terminal-gray/5 border border-terminal-gray/20 rounded-lg p-4 hover:border-terminal-green/30 transition-all duration-300 hover:bg-terminal-gray/10">
+            <div className="space-y-3">
+              {/* Título del artículo */}
+              <h3 className="text-sm font-medium text-terminal-yellow leading-tight group-hover:text-terminal-green transition-colors">
+                {article.title}
+              </h3>
+              
+              {/* Descripción */}
+              <p className="text-xs text-terminal-gray leading-relaxed">
+                {article.description.length > 120 
+                  ? `${article.description.slice(0, 120)}...` 
+                  : article.description
+                }
+              </p>
+              
+              {/* Footer con tiempo y fuente */}
+              <div className="flex items-center justify-between text-xs border-t border-terminal-gray/10 pt-3">
+                <div className="flex items-center gap-2 text-terminal-gray">
+                  <Clock className="h-3 w-3" />
+                  <span>{formatTimeAgo(article.publishedAt)}</span>
+                </div>
+                <div className="text-terminal-blue text-xs font-mono">
+                  {article.source}
                 </div>
               </div>
+              
+              {/* Link para leer */}
+              {article.url !== '#' && (
+                <div className="pt-2">
+                  <a 
+                    href={article.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 text-terminal-blue hover:text-terminal-yellow transition-colors text-xs font-mono group-hover:translate-x-1 transform transition-transform duration-200"
+                  >
+                    <ExternalLink className="h-3 w-3" />
+                    <span>read_more</span>
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         ))}
       </div>
       
       {error && (
-        <div className="text-terminal-yellow text-xs mt-3 border-t border-terminal-gray/10 pt-3">
-          ⚡ Usando noticias curadas + Hacker News
+        <div className="text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-terminal-yellow/10 border border-terminal-yellow/20 rounded-lg text-terminal-yellow text-xs font-mono">
+            <span>⚡</span>
+            <span>mock_data.enabled = true</span>
+          </div>
         </div>
       )}
     </div>

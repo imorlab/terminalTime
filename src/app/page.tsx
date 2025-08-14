@@ -54,9 +54,9 @@ export default function HomePage() {
               
               <div className="space-y-6">
                 <WeatherSection />
-                <NewsSection />
               </div>
             </div>
+                <NewsSection />
           </div>
           
         </div>

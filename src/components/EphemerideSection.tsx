@@ -103,9 +103,6 @@ export default function EphemerideSection() {
 
   return (
     <div className="space-y-6">
-      <div className="output-line text-terminal-green">
-        📅 Efeméride del día
-      </div>
       
       {ephemeride && (
         <div className="bg-terminal-gray/5 border border-terminal-gray/20 rounded-lg p-6">
@@ -114,7 +111,7 @@ export default function EphemerideSection() {
               <Code className="h-6 w-6 text-terminal-blue" />
               <div>
                 <h2 className="text-xl font-semibold text-terminal-yellow">
-                  {ephemeride.title}
+                  📅 Efeméride del día
                 </h2>
                 <div className="flex items-center gap-4 text-sm text-terminal-gray mt-1">
                   <span className="flex items-center gap-1">

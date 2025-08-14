@@ -46,26 +46,23 @@ export default function EphemerideSection() {
       const response = await fetch('/api/ephemerides/today')
       
       if (!response.ok) {
+        if (response.status === 503) {
+          throw new Error('Servicio no disponible')
+        }
         throw new Error('API de efemérides no disponible')
       }
       
       const data = await response.json()
+      
+      if (data.error) {
+        throw new Error(data.error)
+      }
+      
       setEphemeride(data)
     } catch (err) {
       console.log('Error API efemérides:', err)
-      setError('API no disponible')
-      // Mostrar datos de ejemplo mientras no tengamos la API
-      const today = new Date().toISOString().split('T')[0]
-      setCurrentDate(today)
-      setEphemeride({
-        id: '1',
-        date: today,
-        title: 'Lanzamiento de JavaScript',
-        description: 'En 1995, Brendan Eich creó JavaScript en tan solo 10 días mientras trabajaba en Netscape Communications. Originalmente llamado "Mocha", luego "LiveScript", finalmente se convirtió en JavaScript. Este lenguaje revolucionaría el desarrollo web y se convertiría en uno de los lenguajes de programación más utilizados del mundo.',
-        year: 1995,
-        category: 'Lenguajes de Programación',
-        created_at: new Date().toISOString()
-      })
+      setError(err instanceof Error ? err.message : 'API no disponible')
+      // La API ya maneja fallbacks inteligentes, no necesitamos uno aquí
     } finally {
       setLoading(false)
     }

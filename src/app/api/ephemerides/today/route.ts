@@ -1,13 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getTodayEphemeride } from '@/data/ephemerides'
 
-// Solo crear cliente de Supabase si las variables están disponibles
+// Solo crear cliente de Supabase si las variables están disponibles Y son válidas
 let supabase: any = null
-if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
-  const { createClient } = require('@supabase/supabase-js')
-  supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  )
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+if (supabaseUrl && supabaseKey && 
+    supabaseUrl !== 'your_supabase_url_here' && 
+    supabaseKey !== 'your_supabase_service_role_key_here' &&
+    supabaseUrl.startsWith('http')) {
+  try {
+    const { createClient } = require('@supabase/supabase-js')
+    supabase = createClient(supabaseUrl, supabaseKey)
+    console.log('✅ Supabase client creado exitosamente')
+  } catch (error) {
+    console.log('❌ Error creando cliente Supabase:', error)
+    supabase = null
+  }
+} else {
+  console.log('⚠️ Supabase no configurado correctamente, usando solo IA + fallback')
 }
 
 export async function GET() {
@@ -64,17 +76,9 @@ export async function GET() {
           }
         }
       } else {
-        console.log('⚠️ Usando fallback: No se pudo generar con IA')
-        // Fallback: devolver una efeméride de ejemplo
-        ephemeride = {
-          id: 'example-1',
-          date: todayString,
-          title: 'Nacimiento de Ada Lovelace',
-          description: 'En 1815 nació Augusta Ada King, condesa de Lovelace, considerada la primera programadora de la historia. Escribió el primer algoritmo destinado a ser procesado por una máquina, específicamente la Máquina Analítica de Charles Babbage.',
-          year: 1815,
-          category: 'Historia de la Programación',
-          created_at: new Date().toISOString()
-        }
+        console.log('⚠️ IA no disponible, usando efemérides curadas')
+        // Usar efemérides curadas de alta calidad
+        ephemeride = getTodayEphemeride()
       }
     }
     

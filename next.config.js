@@ -3,7 +3,12 @@ const nextConfig = {
   images: {
     domains: [
       'openweathermap.org',
-      // NewsAPI image sources
+      // Medium CDN images
+      'cdn-images-1.medium.com',
+      'miro.medium.com',
+      'cdn-images-2.medium.com',
+      'medium.com',
+      // NewsAPI image sources (legacy)
       'd.newsweek.com',
       'techcrunch.com',
       'cdn.vox-cdn.com',

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { Newspaper, ExternalLink, Clock, RefreshCw, Settings, Check } from 'lucide-react'
+import Image from 'next/image'
 
 interface NewsArticle {
   title: string
@@ -10,6 +11,7 @@ interface NewsArticle {
   publishedAt: string
   source: string
   author?: string
+  imageUrl?: string
 }
 
 interface NewsSource {
@@ -19,14 +21,17 @@ interface NewsSource {
   enabled: boolean
 }
 
+// Categorías de Medium disponibles - mismas que en la API
 const AVAILABLE_SOURCES: NewsSource[] = [
-  { id: 'techcrunch', name: 'TechCrunch', description: 'Startup y tecnología', enabled: true },
-  { id: 'wired', name: 'Wired', description: 'Tecnología y cultura', enabled: true },
-  { id: 'laravel-news', name: 'Laravel News', description: 'PHP y desarrollo web', enabled: true },
-  { id: 'ars-technica', name: 'Ars Technica', description: 'Tecnología avanzada', enabled: false },
-  { id: 'the-verge', name: 'The Verge', description: 'Tech y entretenimiento', enabled: true },
-  { id: 'hacker-news', name: 'Hacker News', description: 'Comunidad tech', enabled: false },
-  { id: 'engadget', name: 'Engadget', description: 'Gadgets y tech', enabled: false }
+  { id: 'artificial-intelligence', name: 'Artificial Intelligence', description: 'IA y Machine Learning', enabled: true },
+  { id: 'programming', name: 'Programming', description: 'Programación general', enabled: true },
+  { id: 'javascript', name: 'JavaScript', description: 'JS y desarrollo frontend', enabled: true },
+  { id: 'software-engineering', name: 'Software Engineering', description: 'Ingeniería de software', enabled: true },
+  { id: 'data-science', name: 'Data Science', description: 'Ciencia de datos', enabled: true },
+  { id: 'laravel', name: 'Laravel', description: 'Framework PHP Laravel', enabled: true },
+  { id: 'philosophy', name: 'Philosophy', description: 'Filosofía', enabled: false },
+  { id: 'economics', name: 'Economics', description: 'Economía', enabled: false },
+  { id: 'spirituality', name: 'Spirituality', description: 'Espiritualidad', enabled: false }
 ]
 
 export default function NewsSection() {
@@ -36,6 +41,7 @@ export default function NewsSection() {
   const [refreshing, setRefreshing] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [sources, setSources] = useState<NewsSource[]>(AVAILABLE_SOURCES)
+  const [tempSources, setTempSources] = useState<NewsSource[]>(AVAILABLE_SOURCES) // Estado temporal para cambios pendientes
   const [showSourceSelector, setShowSourceSelector] = useState(false)
   const [newsOffset, setNewsOffset] = useState(0)
 
@@ -50,8 +56,12 @@ export default function NewsSection() {
       setLoading(true)
       setError(null)
       
-      const enabledSources = sources.filter(s => s.enabled).map(s => s.id).join(',')
-      const response = await fetch(`/api/news/tech?sources=${enabledSources}`)
+      // Obtener categorías habilitadas
+      const enabledCategories = sources.filter(s => s.enabled).map(s => s.id)
+      const categoriesParam = enabledCategories.length > 0 ? `?categories=${enabledCategories.join(',')}` : ''
+      
+      // La API ahora recibe las categorías como parámetro
+      const response = await fetch(`/api/news/tech${categoriesParam}`)
       
       if (!response.ok) {
         throw new Error('API de noticias no disponible')
@@ -62,28 +72,31 @@ export default function NewsSection() {
       // Usar noticias de la API o fallback
       const newsData = data.articles && data.articles.length > 0 ? data.articles : [
         {
-          title: 'Nueva versión de TypeScript 5.5 disponible',
-          description: 'Microsoft lanza TypeScript 5.5 con mejoras en el sistema de tipos y nuevas características para desarrolladores.',
+          title: 'Nueva versión de React 19 disponible',
+          description: 'El equipo de React anuncia nuevas características incluyendo mejor manejo de estado y Server Components mejorados.',
           url: '#',
           publishedAt: new Date().toISOString(),
-          source: 'TechCrunch',
-          author: 'Microsoft Team'
+          source: 'Medium - Programming',
+          author: 'React Team',
+          imageUrl: 'https://cdn-images-1.medium.com/max/800/1*4qLN_FJzBbLgj4qmGMWgJA.png'
         },
         {
-          title: 'OpenAI presenta nuevas capacidades de IA',
-          description: 'La compañía anuncia avances significativos en modelos de lenguaje y herramientas para desarrolladores.',
+          title: 'Laravel 11: Nuevas características',
+          description: 'Laravel 11 introduce mejoras significativas en rendimiento, nuevas APIs y mejor integración con tecnologías modernas.',
           url: '#',
           publishedAt: new Date(Date.now() - 3600000).toISOString(),
-          source: 'Wired',
-          author: 'OpenAI Research'
+          source: 'Medium - Laravel',
+          author: 'Laravel Team',
+          imageUrl: 'https://cdn-images-1.medium.com/max/800/1*wJEF3WgjdQzGbLgRz8FgpQ.png'
         },
         {
-          title: 'React 19 en desarrollo',
-          description: 'El equipo de React trabaja en la próxima versión mayor con mejoras en rendimiento y nuevas APIs.',
+          title: 'Avances en Inteligencia Artificial',
+          description: 'Los últimos desarrollos en IA están revolucionando la forma en que desarrollamos software y resolvemos problemas complejos.',
           url: '#',
           publishedAt: new Date(Date.now() - 7200000).toISOString(),
-          source: 'The Verge',
-          author: 'React Team'
+          source: 'Medium - Artificial Intelligence',
+          author: 'AI Research',
+          imageUrl: 'https://cdn-images-1.medium.com/max/800/1*yBdOZIIIhLglnWYhqq2QhA.png'
         }
       ]
 
@@ -117,6 +130,13 @@ export default function NewsSection() {
     updateDisplayedNews()
   }, [updateDisplayedNews])
 
+  // Sincronizar estado temporal cuando se abre el selector
+  useEffect(() => {
+    if (showSourceSelector) {
+      setTempSources(sources)
+    }
+  }, [showSourceSelector, sources])
+
   const refreshNews = () => {
     setRefreshing(true)
     
@@ -130,7 +150,7 @@ export default function NewsSection() {
   }
 
   const toggleSource = (sourceId: string) => {
-    setSources(prev => 
+    setTempSources(prev => 
       prev.map(source => 
         source.id === sourceId 
           ? { ...source, enabled: !source.enabled }
@@ -140,8 +160,16 @@ export default function NewsSection() {
   }
 
   const applySourceChanges = () => {
+    // Aplicar cambios del estado temporal al estado real
+    setSources(tempSources)
     setShowSourceSelector(false)
-    fetchTechNews()
+    // fetchTechNews se ejecutará automáticamente debido a la dependencia [sources]
+  }
+
+  const cancelSourceChanges = () => {
+    // Restaurar estado temporal al estado actual
+    setTempSources(sources)
+    setShowSourceSelector(false)
   }
 
   const formatTimeAgo = (dateString: string) => {
@@ -208,15 +236,15 @@ export default function NewsSection() {
               className="flex items-center gap-2 px-4 py-2 bg-terminal-gray/10 hover:bg-terminal-gray/20 border border-terminal-gray/20 rounded-lg transition-colors text-sm"
             >
               <Settings className="h-4 w-4 text-terminal-yellow" />
-              <span className="text-terminal-text">Fuentes</span>
+              <span className="text-terminal-text">Categorías</span>
             </button>
             
             {showSourceSelector && (
               <div className="absolute top-full right-0 mt-2 w-80 bg-terminal-bg border border-terminal-gray/20 rounded-lg shadow-lg z-20 p-4">
                 <div className="mb-3">
-                  <h3 className="text-sm font-medium text-terminal-yellow mb-2">Seleccionar fuentes</h3>
+                  <h3 className="text-sm font-medium text-terminal-yellow mb-2">Categorías de Medium</h3>
                   <div className="space-y-2">
-                    {sources.map((source) => (
+                    {tempSources.map((source) => (
                       <label
                         key={source.id}
                         className="flex items-center gap-3 p-2 rounded-md hover:bg-terminal-gray/10 cursor-pointer"
@@ -248,7 +276,7 @@ export default function NewsSection() {
                 </div>
                 <div className="flex justify-end gap-2 pt-3 border-t border-terminal-gray/20">
                   <button
-                    onClick={() => setShowSourceSelector(false)}
+                    onClick={cancelSourceChanges}
                     className="px-3 py-1 text-sm text-terminal-gray hover:text-terminal-text transition-colors"
                   >
                     Cancelar
@@ -269,6 +297,28 @@ export default function NewsSection() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {displayedNews.map((article, index) => (
           <div key={`${article.url}-${index}`} className="group bg-terminal-gray/5 border border-terminal-gray/20 rounded-lg overflow-hidden hover:border-terminal-green/30 transition-all duration-300 hover:bg-terminal-gray/10">
+            {/* Imagen del artículo */}
+            {article.imageUrl ? (
+              <div className="relative h-48 overflow-hidden">
+                <Image
+                  src={article.imageUrl}
+                  alt={article.title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  onError={(e) => {
+                    // Si la imagen falla, ocultar el contenedor
+                    e.currentTarget.parentElement!.style.display = 'none'
+                  }}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-terminal-bg/60 to-transparent" />
+              </div>
+            ) : (
+              <div className="h-32 bg-terminal-gray/10 flex items-center justify-center">
+                <Newspaper className="h-8 w-8 text-terminal-gray/50" />
+              </div>
+            )}
+            
             <div className="p-4 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="text-xs text-terminal-yellow font-mono bg-terminal-bg/70 px-2 py-1 rounded">

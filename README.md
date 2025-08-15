@@ -18,7 +18,7 @@ Historia de la programación en tu terminal. Una aplicación web que muestra efe
 
 - **🗓️ Historia Diaria**: Efemérides de programación y tecnología para cada día con aspecto de terminal integrado
 - **🌤️ Clima Inteligente**: Selector de 30 ciudades españolas con datos meteorológicos en tiempo real (columna lateral)
-- **📰 Noticias Tech**: Agregador multicategoría con NewsAPI (technology, Laravel, frontend) sin imágenes para rendimiento optimizado
+- **📰 Noticias Tech**: Agregador de Medium RSS con filtros de calidad avanzados e imágenes optimizadas
 - **💻 Interfaz Terminal Moderna**: Layout 10/2 columnas - terminal principal (83%) y clima lateral (17%)
 - **🤖 IA con DeepSeek**: Generación automática de efemérides personalizadas con parsing JSON mejorado
 - **📱 Diseño Responsivo**: Layout adaptativo - terminal ocupa 10 cols, clima 2 cols en desktop
@@ -35,7 +35,7 @@ Historia de la programación en tu terminal. Una aplicación web que muestra efe
 - **Frontend**: Next.js 15, React 18, TypeScript
 - **Estilos**: Tailwind CSS con tema terminal personalizado + efectos glassmorphism
 - **Base de datos**: Supabase (PostgreSQL) - Opcional
-- **APIs**: DeepSeek AI, NewsAPI (multicategoría), Open-Meteo (clima)
+- **APIs**: DeepSeek AI, Medium RSS (noticias tech), Open-Meteo (clima)
 - **Iconos**: Lucide React con animaciones
 - **Despliegue**: Vercel
 - **CI/CD**: GitHub Actions
@@ -89,9 +89,6 @@ DEEPSEEK_API_KEY=tu_deepseek_api_key_aqui
    ```env
    # IA para generación de efemérides (recomendado)
    DEEPSEEK_API_KEY=tu_deepseek_api_key_aqui
-   
-   # Noticias tech multicategoría (recomendado)
-   NEWS_API_KEY=tu_news_api_key
    
    # Base de datos (opcional - funciona con mock data)
    NEXT_PUBLIC_SUPABASE_URL=tu_supabase_url
@@ -188,10 +185,13 @@ transition-all duration-300     /* Transiciones suaves */
 - Endpoint: `https://api.open-meteo.com/v1/forecast`
 - Soporte para 30 ciudades españolas
 
-### 📰 Menéame RSS (Noticias)
-- Noticias tech en español curadas por la comunidad
-- Endpoint: `https://www.meneame.net/rss2.php`
-- Contenido local y relevante
+### 📰 Medium RSS (Noticias)
+- Feeds RSS de Medium por categorías técnicas
+- Endpoints: `https://medium.com/feed/topic/{categoria}`
+- Filtros de calidad: solo contenido técnico en inglés
+- Detección automática de spam y números de teléfono
+- Extracción e integración de imágenes optimizadas
+- Categorías: AI, Programming, JavaScript, Software Engineering, Data Science, Laravel
 
 ### 🏙️ Ciudades Soportadas
 
@@ -205,7 +205,28 @@ El selector de clima incluye estas ciudades españolas:
 
 ## 🚀 Despliegue
 
-### ✨ Últimas Mejoras (v2.0)
+### ✨ Últimas Mejoras (v3.0)
+
+**📰 Sistema de Noticias Completamente Renovado:**
+- Migración de NewsAPI a Medium RSS feeds
+- Filtros de calidad avanzados: solo contenido técnico en inglés
+- Sistema anti-spam con detección de números de teléfono
+- Extracción automática de imágenes de artículos
+- Optimización con Next.js Image component
+- Categorías especializadas: AI, Programming, JavaScript, Software Engineering, Data Science, Laravel
+
+**🔒 Filtros de Calidad Robustos:**
+- Detección automática de contenido spam
+- Filtrado por idioma (solo inglés técnico)
+- Validación de palabras clave técnicas
+- Bloqueo de contenido comercial/personal
+- Sistema de patrones regex para números de teléfono
+
+**🖼️ Integración de Imágenes:**
+- Extracción automática desde HTML de Medium
+- CDN optimizado (cdn-images-1.medium.com)
+- Fallback elegante sin imágenes
+- Responsive design adaptativo
 
 **🎨 UI/UX Modernizado:**
 - Nuevo diseño glassmorphism en WeatherSection

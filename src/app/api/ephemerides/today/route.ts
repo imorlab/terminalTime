@@ -22,14 +22,25 @@ if (supabaseUrl && supabaseKey &&
   console.log('⚠️ Supabase no configurado correctamente, usando solo IA + fallback')
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url)
+    const useFallback = searchParams.get('fallback') === 'true'
+    
     console.log('🔑 DEEPSEEK_API_KEY disponible:', !!process.env.DEEPSEEK_API_KEY)
     console.log('� DEEPSEEK_API_KEY length:', process.env.DEEPSEEK_API_KEY?.length || 0)
     console.log('�📅 Generando efeméride para:', new Date().toISOString().split('T')[0])
+    console.log('⚡ Usando fallback rápido:', useFallback)
     
     const today = new Date()
     const todayString = today.toISOString().split('T')[0]
+    
+    // Si se solicita fallback, ir directamente a datos estáticos
+    if (useFallback) {
+      console.log('⚡ Modo fallback: usando datos curados rápidos')
+      const fallbackEphemeride = getTodayEphemeride()
+      return NextResponse.json(fallbackEphemeride)
+    }
     
     let ephemeride = null
 

@@ -75,7 +75,7 @@ export default function NewsSection() {
           title: 'Nueva versión de React 19 disponible',
           description: 'El equipo de React anuncia nuevas características incluyendo mejor manejo de estado y Server Components mejorados.',
           url: '#',
-          publishedAt: new Date().toISOString(),
+          publishedAt: '2025-08-15T10:00:00Z',
           source: 'Medium - Programming',
           author: 'React Team',
           imageUrl: 'https://cdn-images-1.medium.com/max/800/1*4qLN_FJzBbLgj4qmGMWgJA.png'
@@ -84,7 +84,7 @@ export default function NewsSection() {
           title: 'Laravel 11: Nuevas características',
           description: 'Laravel 11 introduce mejoras significativas en rendimiento, nuevas APIs y mejor integración con tecnologías modernas.',
           url: '#',
-          publishedAt: new Date(Date.now() - 3600000).toISOString(),
+          publishedAt: '2025-08-15T09:00:00Z',
           source: 'Medium - Laravel',
           author: 'Laravel Team',
           imageUrl: 'https://cdn-images-1.medium.com/max/800/1*wJEF3WgjdQzGbLgRz8FgpQ.png'
@@ -93,7 +93,7 @@ export default function NewsSection() {
           title: 'Avances en Inteligencia Artificial',
           description: 'Los últimos desarrollos en IA están revolucionando la forma en que desarrollamos software y resolvemos problemas complejos.',
           url: '#',
-          publishedAt: new Date(Date.now() - 7200000).toISOString(),
+          publishedAt: '2025-08-15T08:00:00Z',
           source: 'Medium - Artificial Intelligence',
           author: 'AI Research',
           imageUrl: 'https://cdn-images-1.medium.com/max/800/1*yBdOZIIIhLglnWYhqq2QhA.png'
@@ -111,7 +111,7 @@ export default function NewsSection() {
           title: 'Error: Datos de ejemplo',
           description: 'No se pudieron cargar noticias reales. Mostrando datos de ejemplo.',
           url: '#',
-          publishedAt: new Date().toISOString(),
+          publishedAt: '2025-08-15T12:00:00Z',
           source: 'Sistema',
           author: 'Sistema'
         }
@@ -173,13 +173,23 @@ export default function NewsSection() {
   }
 
   const formatTimeAgo = (dateString: string) => {
-    const date = new Date(dateString)
-    const now = new Date()
-    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60))
-    
-    if (diffInHours < 1) return 'Hace menos de 1h'
-    if (diffInHours < 24) return `Hace ${diffInHours}h`
-    return `Hace ${Math.floor(diffInHours / 24)}d`
+    try {
+      const date = new Date(dateString)
+      const now = new Date()
+      
+      // Verificar si la fecha es válida
+      if (isNaN(date.getTime())) {
+        return 'Reciente'
+      }
+      
+      const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60))
+      
+      if (diffInHours < 1) return 'Hace menos de 1h'
+      if (diffInHours < 24) return `Hace ${diffInHours}h`
+      return `Hace ${Math.floor(diffInHours / 24)}d`
+    } catch {
+      return 'Reciente'
+    }
   }
 
   if (loading) {

@@ -87,13 +87,25 @@ export default function WeatherSection() {
   }, [selectedCity, fetchWeatherForCity])
 
   const setMockWeather = (city: SpanishCity) => {
+    // Usar el nombre de la ciudad como seed para generar datos consistentes
+    const seed = city.name.split('').reduce((a, b) => {
+      a = ((a << 5) - a) + b.charCodeAt(0)
+      return a & a
+    }, 0)
+    
+    // Función de random seeded simple
+    const seededRandom = (seed: number) => {
+      const x = Math.sin(seed) * 10000
+      return x - Math.floor(x)
+    }
+    
     setWeather({
-      temperature: Math.floor(Math.random() * 20) + 10,
+      temperature: Math.floor(seededRandom(seed) * 20) + 10,
       description: 'Parcialmente nublado',
       city: city.name,
-      humidity: Math.floor(Math.random() * 40) + 40,
-      windSpeed: Math.floor(Math.random() * 15) + 5,
-      visibility: Math.floor(Math.random() * 5) + 8,
+      humidity: Math.floor(seededRandom(seed + 1) * 40) + 40,
+      windSpeed: Math.floor(seededRandom(seed + 2) * 15) + 5,
+      visibility: Math.floor(seededRandom(seed + 3) * 5) + 8,
       icon: 'partly-cloudy'
     })
   }

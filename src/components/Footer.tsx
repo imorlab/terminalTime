@@ -4,7 +4,7 @@ import { ExternalLink } from 'lucide-react'
 
 export default function Footer() {
   return (
-    <footer className="mt-12 pt-8">
+    <footer className="mt-12 pt-8" suppressHydrationWarning>
       <div className="text-center space-y-2 text-sm text-terminal-gray">
         <div className="flex items-center justify-center gap-2">
           <span>Pulsa</span>
@@ -27,20 +27,25 @@ export default function Footer() {
           </a>
         </div>
         
-        <div className="flex items-center justify-center gap-1">
-          <span>Desarrollado con</span>
-          <span className="text-purple-400">💜</span>
-          <span>desde Andalucía para el mundo</span>
-          <a 
+        <div className="flex flex-row items-center justify-center gap-1 sm:gap-1">
+          <div className="flex items-center gap-1">
+            <p>
+              Desarrollado con 
+              <span className="text-purple-400"> 💜 </span> 
+              desde Andalucía para el mundo
+            <a 
             href="https://github.com/imorlab/terminalTime" 
             target="_blank" 
             rel="noopener noreferrer"
             title="Ver repositorio en GitHub"
-            className="text-terminal-blue hover:text-terminal-yellow transition-colors inline-flex items-center gap-1 ml-1"
+            className="text-terminal-blue hover:text-terminal-yellow transition-colors inline-flex items-center gap-1 sm:ml-1"
           >
             (GitHub)
             <ExternalLink className="h-3 w-3" />
           </a>
+          </p>
+          </div>
+          
         </div>
       </div>
     </footer>

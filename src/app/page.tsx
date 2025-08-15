@@ -11,9 +11,12 @@ import Footer from '@/components/Footer'
 
 export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true)
-  const [currentTime, setCurrentTime] = useState(new Date())
+  const [currentTime, setCurrentTime] = useState<Date | null>(null)
 
   useEffect(() => {
+    // Inicializar el tiempo solo en el cliente
+    setCurrentTime(new Date())
+    
     const timer = setInterval(() => {
       setCurrentTime(new Date())
     }, 1000)
@@ -46,7 +49,7 @@ export default function HomePage() {
                 <CommandLine  
                   prompt="terminaltime@dev"
                   command="./daily-ephemerides.sh"
-                  time={currentTime}
+                  time={currentTime || new Date()}
                 />
                 
                 <EphemerideSection />

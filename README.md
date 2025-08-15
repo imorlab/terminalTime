@@ -16,13 +16,13 @@ Historia de la programación en tu terminal. Una aplicación web que muestra efe
 
 ## ✨ Características
 
-- **🗓️ Historia Diaria**: Efemérides de programación y tecnología para cada día
-- **🌤️ Clima Inteligente**: Selector de 30 ciudades españolas con datos meteorológicos en tiempo real
-- **📰 Noticias Tech**: Grid de 3 columnas responsivo con últimas noticias de tecnología
-- **💻 Interfaz Terminal Moderna**: UI glassmorphism que simula una terminal con efectos visuales
-- **🤖 IA con DeepSeek**: Generación automática de efemérides personalizadas
-- **📱 Diseño Responsivo**: Layout adaptativo - 1 columna móvil, 2 tablet, 3 desktop
-- **🎨 Efectos Visuales**: Hover effects, transiciones suaves y micro-animaciones
+- **🗓️ Historia Diaria**: Efemérides de programación y tecnología para cada día con aspecto de terminal integrado
+- **🌤️ Clima Inteligente**: Selector de 30 ciudades españolas con datos meteorológicos en tiempo real (columna lateral)
+- **📰 Noticias Tech**: Agregador multicategoría con NewsAPI (technology, Laravel, frontend) sin imágenes para rendimiento optimizado
+- **💻 Interfaz Terminal Moderna**: Layout 10/2 columnas - terminal principal (83%) y clima lateral (17%)
+- **🤖 IA con DeepSeek**: Generación automática de efemérides personalizadas con parsing JSON mejorado
+- **📱 Diseño Responsivo**: Layout adaptativo - terminal ocupa 10 cols, clima 2 cols en desktop
+- **🎨 Efectos Visuales**: Hover effects, transiciones suaves y micro-animaciones estilo terminal
 - **🔄 Auto-refresh**: Las efemérides se actualizan automáticamente cada día
 - **🏙️ Selector de Ciudades**: Dropdown elegante con 30 ciudades principales de España
 - **⚡ Mock Data**: Funcionalidad completa incluso sin APIs configuradas
@@ -35,7 +35,7 @@ Historia de la programación en tu terminal. Una aplicación web que muestra efe
 - **Frontend**: Next.js 15, React 18, TypeScript
 - **Estilos**: Tailwind CSS con tema terminal personalizado + efectos glassmorphism
 - **Base de datos**: Supabase (PostgreSQL) - Opcional
-- **APIs**: DeepSeek AI, Open-Meteo (clima), Menéame RSS (noticias)
+- **APIs**: DeepSeek AI, NewsAPI (multicategoría), Open-Meteo (clima)
 - **Iconos**: Lucide React con animaciones
 - **Despliegue**: Vercel
 - **CI/CD**: GitHub Actions
@@ -90,14 +90,16 @@ DEEPSEEK_API_KEY=tu_deepseek_api_key_aqui
    # IA para generación de efemérides (recomendado)
    DEEPSEEK_API_KEY=tu_deepseek_api_key_aqui
    
+   # Noticias tech multicategoría (recomendado)
+   NEWS_API_KEY=tu_news_api_key
+   
    # Base de datos (opcional - funciona con mock data)
    NEXT_PUBLIC_SUPABASE_URL=tu_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_supabase_anon_key
    SUPABASE_SERVICE_ROLE_KEY=tu_supabase_service_role_key
    
-   # APIs externas (opcional - tiene fallbacks)
+   # Clima (opcional - tiene fallback)
    OPENWEATHER_API_KEY=tu_openweather_api_key
-   NEWS_API_KEY=tu_news_api_key
    ```
 
 4. **Configura la base de datos**

@@ -130,13 +130,16 @@ async function generateTodayEphemeride() {
           },
           {
             role: 'user',
-            content: `Genera una efeméride para el día ${day} de ${month} relacionada con programación, tecnología, informática o desarrollo de software. Debe ser un evento real e histórico. Responde SOLO con un JSON válido con estos campos:
-            {
-              "title": "Título del evento",
-              "description": "Descripción detallada del evento (mínimo 100 palabras)",
-              "year": año_del_evento,
-              "category": "Categoría del evento"
-            }`
+            content: `Genera una efeméride para el día ${day} de ${month} relacionada con programación, tecnología, informática o desarrollo de software. Debe ser un evento real e histórico. 
+
+IMPORTANTE: Responde ÚNICAMENTE con un JSON válido, sin markdown, sin bloques de código, sin texto adicional. Solo el JSON:
+
+{
+  "title": "Título del evento",
+  "description": "Descripción detallada del evento (mínimo 100 palabras)",
+  "year": año_del_evento,
+  "category": "Categoría del evento"
+}`
           }
         ],
         max_tokens: 500,
@@ -153,11 +156,15 @@ async function generateTodayEphemeride() {
     
     const data = await response.json()
     console.log('✅ Respuesta de API recibida:', !!data.choices?.[0]?.message?.content)
-    const content = data.choices[0]?.message?.content
+    let content = data.choices[0]?.message?.content
     
     if (!content) {
-      throw new Error('No se recibió contenido de OpenAI')
+      throw new Error('No se recibió contenido de la API')
     }
+    
+    // Limpiar markdown de la respuesta si existe
+    content = content.replace(/```json\s*/g, '').replace(/```\s*$/g, '').trim()
+    console.log('🧹 Contenido limpiado:', content.substring(0, 100) + '...')
     
     const ephemeride = JSON.parse(content)
     

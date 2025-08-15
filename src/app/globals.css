@@ -32,7 +32,7 @@
 
 @layer components {
   .terminal-window {
-    @apply bg-terminal-bg border border-terminal-gray/30 rounded-lg shadow-2xl;
+    @apply bg-terminal-bg border border-terminal-gray/30 rounded-lg shadow-2xl mb-8;
   }
   
   .terminal-header {

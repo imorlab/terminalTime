@@ -37,30 +37,33 @@ export default function HomePage() {
   return (
     <div className="min-h-screen p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
-        <div className="terminal-window">
-          <TerminalHeader />
-          
-          <div className="terminal-content">
-            <CommandLine 
-              prompt="terminaltime@dev"
-              command="./daily-digest.sh"
-              time={currentTime}
-            />
-            
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
-              <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-10">
+            <div className="terminal-window">
+              <TerminalHeader />
+
+              <div className="terminal-content">
+                <CommandLine  
+                  prompt="terminaltime@dev"
+                  command="./daily-ephemerides.sh"
+                  time={currentTime}
+                />
+                
                 <EphemerideSection />
               </div>
-              
-              <div className="space-y-6">
-                <WeatherSection />
-              </div>
             </div>
-                <NewsSection />
           </div>
           
+          <div className="lg:col-span-2">
+            <WeatherSection />
+          </div>
         </div>
-          <Footer />
+        
+        <div className="mt-8">
+          <NewsSection />
+        </div>
+        
+        <Footer />
       </div>
     </div>
   )

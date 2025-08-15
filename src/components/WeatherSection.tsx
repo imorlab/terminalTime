@@ -149,7 +149,7 @@ export default function WeatherSection() {
     <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-terminal-gray/5 to-terminal-blue/5 border border-terminal-gray/10 backdrop-blur-sm hover:border-terminal-green/30 transition-all duration-300">
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-terminal-green/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
       
-      <div className="relative p-6">
+      <div className="relative p-4">
         {/* Header con selector de ciudad */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">

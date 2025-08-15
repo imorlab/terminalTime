@@ -70,13 +70,16 @@ export default function EphemerideSection() {
 
   if (loading) {
     return (
-      <div className="space-y-4">
-        <div className="output-line text-terminal-blue">
-          📅 Cargando efeméride del día...
+      <div className="space-y-2">
+        
+        {/* <div className="output-line">
+          <span className="text-terminal-green">$</span> <span className="text-terminal-blue">./ephemerides</span> <span className="text-terminal-yellow">--today</span>
+        </div> */}
+        <div className="output-line text-terminal-yellow">
+          ⏳ Cargando efeméride del día...
         </div>
-        <div className="animate-pulse">
-          <div className="h-4 bg-terminal-gray/20 rounded w-3/4 mb-2"></div>
-          <div className="h-4 bg-terminal-gray/20 rounded w-1/2"></div>
+        <div className="output-line text-terminal-gray">
+          └─ Consultando base de datos histórica
         </div>
       </div>
     )
@@ -84,57 +87,60 @@ export default function EphemerideSection() {
 
   if (error && !ephemeride) {
     return (
-      <div className="space-y-4">
+      <div className="space-y-2">
+        {/* <div className="output-line">
+          <span className="text-terminal-green">$</span> <span className="text-terminal-blue">./ephemerides</span> <span className="text-terminal-yellow">--today</span>
+        </div> */}
         <div className="output-line text-terminal-red">
           ❌ Error: {error}
         </div>
         <button 
           onClick={fetchTodayEphemeride}
-          className="text-terminal-blue hover:text-terminal-yellow transition-colors underline"
+          className="output-line text-terminal-blue hover:text-terminal-yellow transition-colors underline cursor-pointer"
         >
-          Reintentar
+          🔄 Reintentar conexión
         </button>
       </div>
     )
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
+      {/* Línea de comando de efemérides */}
+      {/* <div className="output-line">
+        <span className="text-terminal-green">$</span> <span className="text-terminal-blue">./ephemerides</span> <span className="text-terminal-yellow">--today</span>
+      </div> */}
       
       {ephemeride && (
-        <div className="bg-terminal-gray/5 border border-terminal-gray/20 rounded-lg p-6">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <Code className="h-6 w-6 text-terminal-blue" />
-              <div>
-                <h2 className="text-xl font-semibold text-terminal-yellow">
-                  📅 Efeméride del día
-                </h2>
-                <div className="flex items-center gap-4 text-sm text-terminal-gray mt-1">
-                  <span className="flex items-center gap-1">
-                    <Calendar className="h-4 w-4" />
-                    {ephemeride.year}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="h-4 w-4" />
-                    {ephemeride.category}
-                  </span>
-                </div>
-              </div>
-            </div>
+        <div className="space-y-2">
+          {/* Salida estilo terminal */}
+          <div className="output-line text-terminal-green">
+            ✓ Efeméride encontrada para {new Date(ephemeride.date).toLocaleDateString('es-ES')}
           </div>
           
-          <div className="prose prose-invert max-w-none">
+          <div className="output-line">
+            <span className="text-terminal-yellow">📅 {ephemeride.year}:</span> <span className="text-terminal-text font-medium">{ephemeride.title}</span>
+          </div>
+          
+          <div className="output-line text-terminal-gray">
+            ├─ Categoría: <span className="text-terminal-blue">{ephemeride.category}</span>
+          </div>
+          
+          <div className="output-line text-terminal-gray">
+            └─ ID: <span className="text-terminal-yellow">{ephemeride.id}</span>
+          </div>
+          
+          {/* Descripción con estilo de bloque de código */}
+          <div className="mt-4 p-4 bg-terminal-bg/50 border-l-4 border-terminal-green rounded-r">
+            <div className="text-terminal-gray text-xs mb-2">{'/** Descripción **/'}</div>
             <p className="text-terminal-text leading-relaxed">
               {ephemeride.description}
             </p>
           </div>
           
-          <div className="mt-4 pt-4 border-t border-terminal-gray/20">
-            <div className="flex items-center justify-between text-xs text-terminal-gray">
-              <span>Fecha: {new Date(ephemeride.date).toLocaleDateString('es-ES')}</span>
-              <span>ID: {ephemeride.id}</span>
-            </div>
+          {/* Línea de estado final */}
+          <div className="output-line text-terminal-green mt-4">
+            ✓ Proceso completado - Historia cargada exitosamente
           </div>
         </div>
       )}

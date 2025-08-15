@@ -32,9 +32,9 @@ export default function CommandLine({ prompt, command, time }: CommandLineProps)
         <span className="command-text">{command}</span>
         <span className="animate-cursor-blink text-terminal-green">█</span>
       </div>
-      <div className="output-line text-terminal-green">
+      {/* <div className="output-line text-terminal-green">
         ✓ Ejecutando recopilación diaria de datos...
-      </div>
+      </div> */}
     </div>
   )
 }

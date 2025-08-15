@@ -38,7 +38,7 @@ export default function HomePage() {
     <div className="min-h-screen p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-10">
+          <div className="lg:col-span-9">
             <div className="terminal-window">
               <TerminalHeader />
 
@@ -54,7 +54,7 @@ export default function HomePage() {
             </div>
           </div>
           
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-3">
             <WeatherSection />
           </div>
         </div>

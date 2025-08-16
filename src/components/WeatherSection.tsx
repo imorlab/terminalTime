@@ -57,7 +57,7 @@ export default function WeatherSection() {
   const [weather, setWeather] = useState<WeatherData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedCity, setSelectedCity] = useState<SpanishCity>(SPANISH_CITIES[3]) // Madrid por defecto
+  const [selectedCity, setSelectedCity] = useState<SpanishCity>(SPANISH_CITIES[0]) // Madrid por defecto
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [locationDetected, setLocationDetected] = useState(false)
 
@@ -81,90 +81,82 @@ export default function WeatherSection() {
     return nearestCity
   }
 
-  // Función para detectar ubicación automáticamente
-  const detectLocation = useCallback(async () => {
-    if (!navigator.geolocation) {
-      console.log('Geolocalización no soportada')
-      return
-    }
-    
-    console.log('🔍 Iniciando detección de ubicación...')
-    
-    // Primer intento: configuración equilibrada
-    const standardOptions = {
-      enableHighAccuracy: false,
-      timeout: 15000,
-      maximumAge: 600000
-    }
-    
-    // Segundo intento: configuración muy permisiva
-    const fallbackOptions = {
-      enableHighAccuracy: false,
-      timeout: 30000,
-      maximumAge: 3600000 // 1 hora de cache
-    }
-
-    const tryGeolocation = (options: PositionOptions) => {
-      return new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, options)
-      })
-    }
-
+  // Función para detectar ubicación por IP (más confiable)
+  const detectLocationByIP = useCallback(async () => {
     try {
-      // Primer intento
-      const position = await tryGeolocation(standardOptions)
-      console.log('🗺️ Ubicación detectada exitosamente:', position.coords.latitude, position.coords.longitude)
+      // Usar un servicio gratuito de geolocalización por IP
+      const response = await fetch('https://ipapi.co/json/')
       
-      const nearestCity = findNearestCity(
-        position.coords.latitude,
-        position.coords.longitude
-      )
+      if (!response.ok) {
+        throw new Error('Servicio de IP no disponible')
+      }
       
-      console.log('🎯 Ciudad más cercana encontrada:', nearestCity.name, nearestCity.province)
-      setSelectedCity(nearestCity)
-      setLocationDetected(true)
+      const data = await response.json()
       
-    } catch (firstError: any) {
-      console.log('⚠️ Primer intento falló, intentando configuración más permisiva...')
-      
-      try {
-        // Segundo intento con configuración muy permisiva
-        const position = await tryGeolocation(fallbackOptions)
-        console.log('🗺️ Ubicación detectada en segundo intento:', position.coords.latitude, position.coords.longitude)
-        
-        const nearestCity = findNearestCity(
-          position.coords.latitude,
-          position.coords.longitude
-        )
-        
-        console.log('🎯 Ciudad más cercana encontrada:', nearestCity.name, nearestCity.province)
-        setSelectedCity(nearestCity)
-        setLocationDetected(true)
-        
-      } catch (secondError: any) {
-        console.log('❌ Error final detectando ubicación:', secondError.message)
-        console.log('📍 Usando Madrid como ubicación por defecto')
-        
-        // Mapear tipos de error para mejor debugging
-        if (secondError.code) {
-          switch(secondError.code) {
-            case 1: // PERMISSION_DENIED
-              console.log('🚫 Usuario denegó el permiso de ubicación')
-              break
-            case 2: // POSITION_UNAVAILABLE
-              console.log('📍 Información de ubicación no disponible')
-              break
-            case 3: // TIMEOUT
-              console.log('⏰ Timeout - la detección tardó demasiado tiempo')
-              break
-            default:
-              console.log('❓ Error desconocido:', secondError.message)
-              break
-          }
+      if (data.latitude && data.longitude) {
+        // Si es España, buscar la ciudad más cercana
+        if (data.country_code === 'ES') {
+          const nearestCity = findNearestCity(data.latitude, data.longitude)
+          setSelectedCity(nearestCity)
+          setLocationDetected(true)
+          return true
         }
       }
+    } catch (error) {
+      // Error silencioso
     }
+    
+    return false
   }, [])
+
+  // Función para detectar ubicación por GPS (método secundario)
+  const detectLocationByGPS = useCallback(async () => {
+    if (!navigator.geolocation) {
+      return false
+    }
+    
+    return new Promise<boolean>((resolve) => {
+      const options = {
+        enableHighAccuracy: false,
+        timeout: 5000, // Timeout muy corto
+        maximumAge: 300000
+      }
+      
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const nearestCity = findNearestCity(
+            position.coords.latitude,
+            position.coords.longitude
+          )
+          setSelectedCity(nearestCity)
+          setLocationDetected(true)
+          resolve(true)
+        },
+        () => {
+          resolve(false)
+        },
+        options
+      )
+    })
+  }, [])
+
+  // Función principal que combina ambos métodos
+  const detectLocation = useCallback(async () => {
+    try {
+      // Método 1: IP primero (más confiable y rápido)
+      const ipSuccess = await detectLocationByIP()
+      if (ipSuccess) return
+      
+      // Método 2: GPS como fallback
+      const gpsSuccess = await detectLocationByGPS()
+      if (gpsSuccess) return
+      
+      // Si ambos fallan, Madrid por defecto (sin logging)
+      
+    } catch (error) {
+      // Error silencioso
+    }
+  }, [detectLocationByIP, detectLocationByGPS])
 
   const fetchWeatherForCity = useCallback(async (city: SpanishCity) => {
     try {
@@ -180,7 +172,6 @@ export default function WeatherSection() {
       const data = await response.json()
       setWeather({ ...data, city: city.name })
     } catch (apiError) {
-      console.log('Error API clima:', apiError)
       setError('API no disponible')
       setMockWeather(city)
     } finally {
@@ -195,10 +186,13 @@ export default function WeatherSection() {
       // Usar un pequeño delay para que no interfiera con la carga inicial
       const timer = setTimeout(() => {
         detectLocation().catch(() => {
-          // Si hay cualquier error, simplemente continuar sin hacer nada
-          console.log('🏙️ Usando ubicación por defecto (Madrid)')
+          // Si hay cualquier error, simplemente continuar silenciosamente
+          // Solo log en desarrollo
+          if (process.env.NODE_ENV === 'development') {
+            console.log('🏙️ Usando ubicación por defecto (Madrid)')
+          }
         })
-      }, 1000) // 1 segundo de delay
+      }, 2000) // 2 segundos de delay para mejor UX
       
       return () => clearTimeout(timer)
     }

@@ -1,12 +1,16 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+}
 
 export const metadata: Metadata = {
   title: 'TerminalTime - Historia de la Programación en tu Terminal',
   description: 'Descubre efemérides de programación, noticias tech y clima en una interfaz terminal. Historia diaria del desarrollo de software y tecnología.',
   keywords: ['programación', 'historia', 'tecnología', 'efemérides', 'desarrollo', 'terminal', 'tech news'],
   authors: [{ name: 'TerminalTime' }],
-  viewport: 'width=device-width, initial-scale=1',
   openGraph: {
     title: 'TerminalTime - Historia de la Programación',
     description: 'Tu dosis diaria de historia tech en una terminal minimalista',

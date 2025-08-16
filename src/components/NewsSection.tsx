@@ -314,6 +314,7 @@ export default function NewsSection() {
                   src={article.imageUrl}
                   alt={article.title}
                   fill
+                  priority={index < 3} // Prioridad para las primeras 3 imágenes
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                   onError={(e) => {
                     // Si la imagen falla, ocultar el contenedor

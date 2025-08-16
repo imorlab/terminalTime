@@ -57,8 +57,63 @@ export default function WeatherSection() {
   const [weather, setWeather] = useState<WeatherData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedCity, setSelectedCity] = useState<SpanishCity>(SPANISH_CITIES[0])
+  const [selectedCity, setSelectedCity] = useState<SpanishCity>(SPANISH_CITIES[3]) // Madrid por defecto
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [locationDetected, setLocationDetected] = useState(false)
+
+  // Función para encontrar la ciudad más cercana a las coordenadas
+  const findNearestCity = (userLat: number, userLon: number): SpanishCity => {
+    let nearestCity = SPANISH_CITIES[0]
+    let minDistance = Infinity
+
+    SPANISH_CITIES.forEach(city => {
+      // Calcular distancia usando fórmula de Haversine simplificada
+      const deltaLat = userLat - city.lat
+      const deltaLon = userLon - city.lon
+      const distance = Math.sqrt(deltaLat * deltaLat + deltaLon * deltaLon)
+      
+      if (distance < minDistance) {
+        minDistance = distance
+        nearestCity = city
+      }
+    })
+
+    return nearestCity
+  }
+
+  // Función para detectar ubicación automáticamente
+  const detectLocation = useCallback(async () => {
+    if (!navigator.geolocation) {
+      console.log('Geolocalización no soportada')
+      return
+    }
+    
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 300000 // 5 minutos de cache
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        console.log('🗺️ Ubicación detectada:', position.coords.latitude, position.coords.longitude)
+        
+        const nearestCity = findNearestCity(
+          position.coords.latitude,
+          position.coords.longitude
+        )
+        
+        console.log('🎯 Ciudad más cercana:', nearestCity.name)
+        setSelectedCity(nearestCity)
+        setLocationDetected(true)
+      },
+      (error) => {
+        console.log('❌ Error detectando ubicación:', error.message)
+        // Si hay error, mantener Madrid como ciudad por defecto
+      },
+      options
+    )
+  }, [])
 
   const fetchWeatherForCity = useCallback(async (city: SpanishCity) => {
     try {
@@ -81,6 +136,13 @@ export default function WeatherSection() {
       setLoading(false)
     }
   }, [])
+
+  useEffect(() => {
+    // Intentar detectar ubicación automáticamente solo la primera vez
+    if (!locationDetected) {
+      detectLocation()
+    }
+  }, [detectLocation, locationDetected])
 
   useEffect(() => {
     fetchWeatherForCity(selectedCity)

@@ -330,17 +330,17 @@ export default function NewsSection() {
             )}
             
             <div className="p-4 space-y-3">
-              <div className="flex items-center justify-between">
+              {/* <div className="flex items-center justify-between">
                 <div className="text-xs text-terminal-yellow font-mono bg-terminal-bg/70 px-2 py-1 rounded">
                   {article.source}
                 </div>
-              </div>
+              </div> */}
               
-              <h3 className="text-sm font-medium text-terminal-yellow leading-tight group-hover:text-terminal-green transition-colors line-clamp-2">
+              <h3 className="text-lg font-medium text-terminal-white leading-tight group-hover:text-terminal-green transition-colors line-clamp-2">
                 {article.title}
               </h3>
               
-              <p className="text-xs text-terminal-gray leading-relaxed line-clamp-3">
+              <p className="text-sm text-terminal-gray leading-relaxed line-clamp-3">
                 {article.description}
               </p>
               
@@ -350,22 +350,21 @@ export default function NewsSection() {
                   <span>{formatTimeAgo(article.publishedAt)}</span>
                 </div>
                 {article.author && (
-                  <div className="text-terminal-blue text-xs font-mono truncate max-w-[100px]">
+                  <div className="text-terminal-yellow text-xs font-mono truncate max-w-[100px]">
                     {article.author}
                   </div>
                 )}
               </div>
               
               {article.url !== '#' && (
-                <div className="pt-2">
+                <div className="pt-2 text-center">
                   <a 
                     href={article.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1 text-terminal-blue hover:text-terminal-yellow transition-colors text-xs font-mono group-hover:translate-x-1 transform transition-transform duration-200"
+                    className="flex items-center justify-center gap-1 text-terminal-blue hover:text-terminal-yellow transition-colors text-xs font-mono group-hover:scale-105 transform transition-transform duration-200"
                   >
-                    <ExternalLink className="h-3 w-3" />
-                    <span>read_more</span>
+                    <span>Saber más</span>
                   </a>
                 </div>
               )}

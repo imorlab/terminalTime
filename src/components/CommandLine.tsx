@@ -28,9 +28,10 @@ export default function CommandLine({ prompt, command, time }: CommandLineProps)
         {formatDate(time)} | {formatTime(time)}
       </div>
       <div className="command-line">
-        <span className="command-prompt">{prompt}:~$</span>
-        <span className="command-text">{command}</span>
-        <span className="animate-cursor-blink text-terminal-green">█</span>
+        <p className="command-prompt">{prompt}:~$
+          <span className="command-text">{command}</span>
+          <span className="animate-cursor-blink text-terminal-green">█</span>
+        </p>
       </div>
       {/* <div className="output-line text-terminal-green">
         ✓ Ejecutando recopilación diaria de datos...

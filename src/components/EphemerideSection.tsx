@@ -244,7 +244,7 @@ export default function EphemerideSection() {
           </div>
           
           {/* Descripción con estilo de bloque de código */}
-          <div className="mt-4 p-1 md:p-4 bg-terminal-bg/50 border-l-4 border-terminal-green rounded-r">
+          <div className="mt-4 p-1 md:p-4 bg-terminal-bg/50 border-l-1 md:border-l-4 border-terminal-green rounded-r">
             <p className="text-terminal-text leading-relaxed text-sm md:text-base">
               {ephemeride.description}
             </p>

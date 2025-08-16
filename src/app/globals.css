@@ -60,7 +60,7 @@
   }
   
   .output-line {
-    @apply ml-4 text-terminal-gray;
+    @apply ml-0 md:ml-4 text-terminal-gray;
   }
   
   .highlight-text {

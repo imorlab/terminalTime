@@ -38,18 +38,18 @@ export default function Footer() {
         <div className="flex flex-row items-center justify-center gap-1 sm:gap-1">
           <div className="flex items-center gap-1">
             
-              <a
-            href="https://github.com/imorlab/terminalTime" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            title="Ver repositorio en GitHub"
-            className="text-terminal-blue hover:text-terminal-yellow transition-colors inline-flex items-center gap-1 sm:ml-1"
-          >
+            <a
+              href="https://github.com/imorlab/terminalTime" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              title="Ver repositorio en GitHub"
+              className="text-terminal-blue hover:text-terminal-yellow transition-colors inline-block items-center gap-1 sm:ml-1"
+            >
               Desarrollado con 
               <span className="text-purple-400"> 💜 </span> 
               desde Andalucía para el mundo
             
-          </a>
+            </a>
           
           </div>
           

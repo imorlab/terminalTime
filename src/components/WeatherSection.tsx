@@ -88,31 +88,82 @@ export default function WeatherSection() {
       return
     }
     
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 300000 // 5 minutos de cache
+    console.log('🔍 Iniciando detección de ubicación...')
+    
+    // Primer intento: configuración equilibrada
+    const standardOptions = {
+      enableHighAccuracy: false,
+      timeout: 15000,
+      maximumAge: 600000
+    }
+    
+    // Segundo intento: configuración muy permisiva
+    const fallbackOptions = {
+      enableHighAccuracy: false,
+      timeout: 30000,
+      maximumAge: 3600000 // 1 hora de cache
     }
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        console.log('🗺️ Ubicación detectada:', position.coords.latitude, position.coords.longitude)
+    const tryGeolocation = (options: PositionOptions) => {
+      return new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, options)
+      })
+    }
+
+    try {
+      // Primer intento
+      const position = await tryGeolocation(standardOptions)
+      console.log('🗺️ Ubicación detectada exitosamente:', position.coords.latitude, position.coords.longitude)
+      
+      const nearestCity = findNearestCity(
+        position.coords.latitude,
+        position.coords.longitude
+      )
+      
+      console.log('🎯 Ciudad más cercana encontrada:', nearestCity.name, nearestCity.province)
+      setSelectedCity(nearestCity)
+      setLocationDetected(true)
+      
+    } catch (firstError: any) {
+      console.log('⚠️ Primer intento falló, intentando configuración más permisiva...')
+      
+      try {
+        // Segundo intento con configuración muy permisiva
+        const position = await tryGeolocation(fallbackOptions)
+        console.log('🗺️ Ubicación detectada en segundo intento:', position.coords.latitude, position.coords.longitude)
         
         const nearestCity = findNearestCity(
           position.coords.latitude,
           position.coords.longitude
         )
         
-        console.log('🎯 Ciudad más cercana:', nearestCity.name)
+        console.log('🎯 Ciudad más cercana encontrada:', nearestCity.name, nearestCity.province)
         setSelectedCity(nearestCity)
         setLocationDetected(true)
-      },
-      (error) => {
-        console.log('❌ Error detectando ubicación:', error.message)
-        // Si hay error, mantener Madrid como ciudad por defecto
-      },
-      options
-    )
+        
+      } catch (secondError: any) {
+        console.log('❌ Error final detectando ubicación:', secondError.message)
+        console.log('📍 Usando Madrid como ubicación por defecto')
+        
+        // Mapear tipos de error para mejor debugging
+        if (secondError.code) {
+          switch(secondError.code) {
+            case 1: // PERMISSION_DENIED
+              console.log('🚫 Usuario denegó el permiso de ubicación')
+              break
+            case 2: // POSITION_UNAVAILABLE
+              console.log('📍 Información de ubicación no disponible')
+              break
+            case 3: // TIMEOUT
+              console.log('⏰ Timeout - la detección tardó demasiado tiempo')
+              break
+            default:
+              console.log('❓ Error desconocido:', secondError.message)
+              break
+          }
+        }
+      }
+    }
   }, [])
 
   const fetchWeatherForCity = useCallback(async (city: SpanishCity) => {
@@ -139,8 +190,17 @@ export default function WeatherSection() {
 
   useEffect(() => {
     // Intentar detectar ubicación automáticamente solo la primera vez
+    // Hacerlo de forma silenciosa y no blocking
     if (!locationDetected) {
-      detectLocation()
+      // Usar un pequeño delay para que no interfiera con la carga inicial
+      const timer = setTimeout(() => {
+        detectLocation().catch(() => {
+          // Si hay cualquier error, simplemente continuar sin hacer nada
+          console.log('🏙️ Usando ubicación por defecto (Madrid)')
+        })
+      }, 1000) // 1 segundo de delay
+      
+      return () => clearTimeout(timer)
     }
   }, [detectLocation, locationDetected])
 

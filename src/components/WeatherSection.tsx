@@ -111,7 +111,7 @@ export default function WeatherSection() {
   }
 
   const getWeatherIcon = (iconType: string, size: 'sm' | 'lg' = 'lg') => {
-    const sizeClass = size === 'sm' ? 'h-5 w-5' : 'h-10 w-10'
+    const sizeClass = size === 'sm' ? 'h-10 w-10' : 'h-16 w-16'
     
     switch (iconType) {
       case 'sunny':
@@ -172,7 +172,7 @@ export default function WeatherSection() {
           <div className="relative">
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="flex items-center gap-2 px-3 py-1.5 bg-terminal-gray/10 hover:bg-terminal-gray/20 rounded-lg border border-terminal-gray/20 transition-colors text-sm"
+              className="flex items-center gap-1 px-2 py-1.5 bg-terminal-gray/10 hover:bg-terminal-gray/20 rounded-lg border border-terminal-gray/20 transition-colors text-sm"
             >
               <MapPin className="h-4 w-4 text-terminal-yellow" />
               <span className="text-terminal-text">{selectedCity.name}</span>
@@ -212,10 +212,10 @@ export default function WeatherSection() {
               <div className="flex items-center gap-4">
                 {getWeatherIcon(weather.icon)}
                 <div>
-                  <div className="text-3xl font-light text-terminal-text">
+                  <div className="text-4xl font-light text-terminal-text">
                     {weather.temperature}°C
                   </div>
-                  <div className="text-sm text-terminal-gray font-mono">
+                  <div className="text-md text-terminal-gray font-mono">
                     {weather.description}
                   </div>
                 </div>

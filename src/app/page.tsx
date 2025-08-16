@@ -47,7 +47,7 @@ export default function HomePage() {
 
               <div className="terminal-content">
                 <CommandLine  
-                  prompt="terminaltime@dev"
+                  prompt="imorlab@dev"
                   command="./daily-ephemerides.sh"
                   time={currentTime || new Date()}
                 />

@@ -7,7 +7,7 @@ export default function TerminalHeader() {
         <div className="terminal-dot bg-green-500"></div>
       </div>
       <div className="flex-1 text-center text-sm text-terminal-gray">
-        terminaltime-terminal
+        terminal-time
       </div>
       <div className="text-xs text-terminal-gray">
         SSH: active

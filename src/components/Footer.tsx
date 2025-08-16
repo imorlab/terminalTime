@@ -15,35 +15,42 @@ export default function Footer() {
         </div>
         
         <div className="flex items-center justify-center gap-1">
-          <span>© 2025</span>
+          <span>©2025</span>
           <a 
             href="https://imorlab.github.io" 
             target="_blank" 
             rel="noopener noreferrer"
             className="text-terminal-blue hover:text-terminal-yellow transition-colors inline-flex items-center gap-1"
           >
-            imorlab by Israel Moreno
-            <ExternalLink className="h-3 w-3" />
+            imorlab 
+          </a>
+          by
+          <a 
+            href="https://www.linkedin.com/in/israelmorenolabrador/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-terminal-blue hover:text-terminal-yellow transition-colors inline-flex items-center gap-1"
+          >
+            Israel Moreno
           </a>
         </div>
         
         <div className="flex flex-row items-center justify-center gap-1 sm:gap-1">
           <div className="flex items-center gap-1">
-            <p>
-              Desarrollado con 
-              <span className="text-purple-400"> 💜 </span> 
-              desde Andalucía para el mundo
-            <a 
+            
+              <a
             href="https://github.com/imorlab/terminalTime" 
             target="_blank" 
             rel="noopener noreferrer"
             title="Ver repositorio en GitHub"
             className="text-terminal-blue hover:text-terminal-yellow transition-colors inline-flex items-center gap-1 sm:ml-1"
           >
-            (GitHub)
-            <ExternalLink className="h-3 w-3" />
+              Desarrollado con 
+              <span className="text-purple-400"> 💜 </span> 
+              desde Andalucía para el mundo
+            
           </a>
-          </p>
+          
           </div>
           
         </div>

@@ -34,14 +34,6 @@ INSERT INTO ephemerides (id, date, title, description, year, category) VALUES
   'Augusta Ada King, condesa de Lovelace, nació el 10 de diciembre de 1815. Es considerada la primera programadora de la historia por escribir el primer algoritmo destinado a ser procesado por una máquina, específicamente la Máquina Analítica de Charles Babbage. Sus notas sobre el motor analítico incluyen lo que se reconoce como el primer algoritmo informático, ganándose el título de "primera programadora del mundo".',
   1815,
   'Historia de la Programación'
-),
-(
-  'example-javascript-birth',
-  CURRENT_DATE,
-  'El Nacimiento de JavaScript',
-  'En mayo de 1995, Brendan Eich creó JavaScript en tan solo 10 días mientras trabajaba en Netscape Communications. Originalmente llamado "Mocha", luego "LiveScript", finalmente se convirtió en JavaScript. Este lenguaje revolucionaría el desarrollo web y se convertiría en uno de los lenguajes de programación más utilizados del mundo, siendo fundamental para el desarrollo web moderno.',
-  1995,
-  'Lenguajes de Programación'
 )
 ON CONFLICT (date) DO NOTHING;
 

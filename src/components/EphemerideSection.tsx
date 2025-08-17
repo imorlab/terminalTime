@@ -129,27 +129,42 @@ function LoadingEphemeride({ onCancel }: { onCancel?: () => void }) {
   )
 }
 
-export default function EphemerideSection() {
+interface EphemerideSectionProps {
+  onLoadingChange?: (completed: boolean) => void
+  shouldStartFetch?: boolean
+}
+
+export default function EphemerideSection({ onLoadingChange, shouldStartFetch = false }: EphemerideSectionProps) {
   const [ephemeride, setEphemeride] = useState<Ephemeride | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false) // Iniciar como false hasta que se active el fetch
   const [error, setError] = useState<string | null>(null)
   const [currentDate, setCurrentDate] = useState<string>('')
   const [useFallback, setUseFallback] = useState(false)
 
   useEffect(() => {
-    fetchTodayEphemeride()
+    // Solo iniciar el fetch cuando se indique desde el comando
+    if (shouldStartFetch) {
+      fetchTodayEphemeride()
+    }
     
     // Verificar cada minuto si cambió el día
     const interval = setInterval(() => {
       const today = new Date().toISOString().split('T')[0]
-      if (currentDate && currentDate !== today) {
+      if (currentDate && currentDate !== today && shouldStartFetch) {
         console.log('📅 Nuevo día detectado, refrescando efeméride...')
         fetchTodayEphemeride()
       }
     }, 60000) // Verificar cada minuto
     
     return () => clearInterval(interval)
-  }, [currentDate])
+  }, [currentDate, shouldStartFetch])
+
+  // Notificar cuando cambie el estado de carga
+  useEffect(() => {
+    if (onLoadingChange) {
+      onLoadingChange(!loading)
+    }
+  }, [loading, onLoadingChange])
 
   const fetchTodayEphemeride = async (forceFallback = false) => {
     try {
@@ -160,6 +175,9 @@ export default function EphemerideSection() {
       // Actualizar fecha actual
       const today = new Date().toISOString().split('T')[0]
       setCurrentDate(today)
+      
+      // Tiempo de inicio para calcular duración
+      const startTime = Date.now()
       
       const url = forceFallback 
         ? '/api/ephemerides/today?fallback=true' 
@@ -178,6 +196,17 @@ export default function EphemerideSection() {
       
       if (data.error) {
         throw new Error(data.error)
+      }
+      
+      // Calcular tiempo transcurrido
+      const elapsedTime = Date.now() - startTime
+      const minLoadingTime = 3000 // 3 segundos adicionales mínimo para que se vea el loading
+      
+      // Si la carga fue muy rápida (desde DB), añadir delay adicional
+      if (elapsedTime < minLoadingTime) {
+        const remainingTime = minLoadingTime - elapsedTime
+        console.log(`⏱️ Carga rápida detectada (${elapsedTime}ms), añadiendo delay adicional de ${remainingTime}ms`)
+        await new Promise(resolve => setTimeout(resolve, remainingTime))
       }
       
       setEphemeride(data)
@@ -217,6 +246,11 @@ export default function EphemerideSection() {
     )
   }
 
+  // Si no se ha iniciado el fetch, no mostrar nada
+  if (!shouldStartFetch && !ephemeride) {
+    return null
+  }
+
   return (
     <div className="space-y-4">
       {/* Línea de comando de efemérides */}
@@ -253,6 +287,14 @@ export default function EphemerideSection() {
           {/* Línea de estado final */}
           <div className="output-line text-terminal-green mt-4">
             ✓ Proceso completado - Historia cargada exitosamente
+          </div>
+          
+          {/* Nuevo prompt justo después de completar la efeméride */}
+          <div className="command-line mt-6">
+            <p className="command-prompt">
+              imorlab@dev:~$
+              <span className="text-terminal-green ml-1 animate-cursor-blink">█</span>
+            </p>
           </div>
         </div>
       )}

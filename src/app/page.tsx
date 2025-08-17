@@ -12,6 +12,8 @@ import Footer from '@/components/Footer'
 export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true)
   const [currentTime, setCurrentTime] = useState<Date | null>(null)
+  const [isEphemerideFetchComplete, setIsEphemerideFetchComplete] = useState(false)
+  const [shouldStartEphemerideFetch, setShouldStartEphemerideFetch] = useState(false)
 
   useEffect(() => {
     // Inicializar el tiempo solo en el cliente
@@ -28,6 +30,14 @@ export default function HomePage() {
 
     return () => clearInterval(timer)
   }, [])
+
+  const handleEphemerideComplete = (completed: boolean) => {
+    setIsEphemerideFetchComplete(completed)
+  }
+
+  const handleCommandComplete = () => {
+    setShouldStartEphemerideFetch(true)
+  }
 
   if (isLoading) {
     return (
@@ -50,9 +60,14 @@ export default function HomePage() {
                   prompt="imorlab@dev"
                   command="./daily-ephemerides.sh"
                   time={currentTime || new Date()}
+                  isEphemerideFetchComplete={isEphemerideFetchComplete}
+                  onCommandComplete={handleCommandComplete}
                 />
                 
-                <EphemerideSection />
+                <EphemerideSection 
+                  onLoadingChange={handleEphemerideComplete}
+                  shouldStartFetch={shouldStartEphemerideFetch}
+                />
               </div>
             </div>
           </div>

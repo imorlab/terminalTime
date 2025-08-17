@@ -16,13 +16,13 @@ Historia de la programación en tu terminal. Una aplicación web que muestra efe
 
 ## ✨ Características
 
-- **🗓️ Historia Diaria**: Efemérides de programación y tecnología para cada día con aspecto de terminal integrado
+- **🗓️ Efemérides Inteligentes**: Sistema de 3 niveles (Base de datos → IA → Fallback) con efectos de terminal realistas
 - **🌤️ Clima Inteligente**: Selector de 30 ciudades españolas con datos meteorológicos en tiempo real (columna lateral)
 - **📰 Noticias Tech**: Agregador de Medium RSS con filtros de calidad avanzados e imágenes optimizadas
 - **💻 Interfaz Terminal Moderna**: Layout 10/2 columnas - terminal principal (83%) y clima lateral (17%)
-- **🤖 IA con DeepSeek**: Generación automática de efemérides personalizadas con parsing JSON mejorado
+- **🤖 IA con DeepSeek**: Generación automática de efemérides personalizadas con guardado en base de datos
 - **📱 Diseño Responsivo**: Layout adaptativo - terminal ocupa 10 cols, clima 2 cols en desktop
-- **🎨 Efectos Visuales**: Hover effects, transiciones suaves y micro-animaciones estilo terminal
+- **🎨 Efectos Visuales**: Animaciones de máquina de escribir, cursores parpadeantes y transiciones suaves
 - **🔄 Auto-refresh**: Las efemérides se actualizan automáticamente cada día
 - **🏙️ Selector de Ciudades**: Dropdown elegante con 30 ciudades principales de España
 - **⚡ Mock Data**: Funcionalidad completa incluso sin APIs configuradas
@@ -99,19 +99,31 @@ DEEPSEEK_API_KEY=tu_deepseek_api_key_aqui
    OPENWEATHER_API_KEY=tu_openweather_api_key
    ```
 
-4. **Configura la base de datos**
+4. **Configura la base de datos (opcional)**
    
-   Crea la tabla en Supabase:
+   El sistema funciona con un esquema de 3 niveles:
+   - **🚀 Base de datos**: Respuestas instantáneas (cuando está configurada)
+   - **🤖 IA DeepSeek**: Generación automática + guardado en DB
+   - **📋 Fallback**: Datos curados de alta calidad
+   
+   Para configurar Supabase:
    ```sql
+   -- Ejecuta en SQL Editor de Supabase Dashboard
+   -- El schema completo está en: database/schema.sql
    CREATE TABLE ephemerides (
      id TEXT PRIMARY KEY,
-     date DATE NOT NULL,
+     date DATE NOT NULL UNIQUE,
      title TEXT NOT NULL,
      description TEXT NOT NULL,
      year INTEGER NOT NULL,
      category TEXT NOT NULL,
      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
    );
+   
+   -- Políticas RLS para acceso público
+   ALTER TABLE ephemerides ENABLE ROW LEVEL SECURITY;
+   CREATE POLICY "public_read" ON ephemerides FOR SELECT USING (true);
+   CREATE POLICY "service_write" ON ephemerides FOR INSERT WITH CHECK (true);
    ```
 
 5. **Ejecuta en modo desarrollo**
@@ -173,11 +185,25 @@ transition-all duration-300     /* Transiciones suaves */
 - **EphemerideSection**: Layout integrado con mejor tipografía
 - **Dropdowns**: Efectos de hover y transiciones elegantes
 
-## 🔧 APIs y Servicios
+## �️ Sistema de Efemérides
+
+### Arquitectura de 3 Niveles
+1. **🚀 Base de Datos (Supabase)**: Respuestas instantáneas para fechas previamente consultadas
+2. **🤖 IA (DeepSeek)**: Genera efemérides históricas reales y las guarda automáticamente
+3. **📋 Fallback Estático**: Datos curados de alta calidad como último recurso
+
+### Flujo de Terminal Realista
+- **Comando con efecto máquina de escribir**: `./daily-ephemerides.sh`
+- **Loading dinámico**: Pasos de progreso, datos curiosos y timing natural
+- **Resultado formateado**: Estilo terminal con información estructurada
+- **Prompt final**: Cursor parpadeante listo para nuevos comandos
+
+## �🔧 APIs y Servicios
 
 ### 🧠 DeepSeek AI
-- Generación automática de efemérides personalizadas
+- Generación automática de efemérides históricas reales
 - Endpoint: `https://api.deepseek.com/chat/completions`
+- **Auto-guardado**: Las efemérides generadas se almacenan en Supabase
 - Fallback: Contenido curado estático
 
 ### 🌤️ Open-Meteo (Clima)

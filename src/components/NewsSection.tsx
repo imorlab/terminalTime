@@ -220,7 +220,7 @@ export default function NewsSection() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 fade-in">
       <div className="text-center">
         <div className="flex items-center justify-center gap-2 mb-2">
           <Newspaper className="h-6 w-6 text-terminal-blue" />
@@ -305,73 +305,82 @@ export default function NewsSection() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {displayedNews.map((article, index) => (
-          <div key={`${article.url}-${index}`} className="group bg-terminal-gray/5 border border-terminal-gray/20 rounded-lg overflow-hidden hover:border-terminal-green/30 transition-all duration-300 hover:bg-terminal-gray/10">
-            {/* Imagen del artículo */}
-            {article.imageUrl ? (
-              <div className="relative h-48 overflow-hidden">
-                <Image
-                  src={article.imageUrl}
-                  alt={article.title}
-                  fill
-                  priority={index < 3} // Prioridad para las primeras 3 imágenes
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  onError={(e) => {
-                    // Si la imagen falla, ocultar el contenedor
-                    e.currentTarget.parentElement!.style.display = 'none'
-                  }}
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-terminal-bg/60 to-transparent" />
-              </div>
-            ) : (
-              <div className="h-32 bg-terminal-gray/10 flex items-center justify-center">
-                <Newspaper className="h-8 w-8 text-terminal-gray/50" />
-              </div>
-            )}
-            
-            <div className="p-4 space-y-3">
-              {/* <div className="flex items-center justify-between">
-                <div className="text-xs text-terminal-yellow font-mono bg-terminal-bg/70 px-2 py-1 rounded">
-                  {article.source}
+        {displayedNews.map((article, index) => {
+          const delayClass = index === 0 ? 'slide-up-delay-1' : 
+                           index === 1 ? 'slide-up-delay-2' : 
+                           'slide-up-delay-3';
+          
+          return (
+            <div 
+              key={`${article.url}-${index}`} 
+              className={`group bg-terminal-gray/5 border border-terminal-gray/20 rounded-lg overflow-hidden hover:border-terminal-green/30 transition-all duration-300 hover:bg-terminal-gray/10 ${delayClass}`}
+            >
+              {/* Imagen del artículo */}
+              {article.imageUrl ? (
+                <div className="relative h-48 overflow-hidden">
+                  <Image
+                    src={article.imageUrl}
+                    alt={article.title}
+                    fill
+                    priority={index < 3} // Prioridad para las primeras 3 imágenes
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      // Si la imagen falla, ocultar el contenedor
+                      e.currentTarget.parentElement!.style.display = 'none'
+                    }}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-terminal-bg/60 to-transparent" />
                 </div>
-              </div> */}
-              
-              <h3 className="text-lg font-medium text-terminal-white leading-tight group-hover:text-terminal-green transition-colors line-clamp-2">
-                {article.title}
-              </h3>
-              
-              <p className="text-sm text-terminal-gray leading-relaxed line-clamp-3">
-                {article.description}
-              </p>
-              
-              <div className="flex items-center justify-between text-xs border-t border-terminal-gray/10 pt-3">
-                <div className="flex items-center gap-2 text-terminal-gray">
-                  <Clock className="h-3 w-3" />
-                  <span>{formatTimeAgo(article.publishedAt)}</span>
+              ) : (
+                <div className="h-32 bg-terminal-gray/10 flex items-center justify-center">
+                  <Newspaper className="h-8 w-8 text-terminal-gray/50" />
                 </div>
-                {article.author && (
-                  <div className="text-terminal-yellow text-xs font-mono truncate max-w-[100px]">
-                    {article.author}
+              )}
+              
+              <div className="p-4 space-y-3">
+                {/* <div className="flex items-center justify-between">
+                  <div className="text-xs text-terminal-yellow font-mono bg-terminal-bg/70 px-2 py-1 rounded">
+                    {article.source}
+                  </div>
+                </div> */}
+                
+                <h3 className="text-lg font-medium text-terminal-white leading-tight group-hover:text-terminal-green transition-colors line-clamp-2">
+                  {article.title}
+                </h3>
+                
+                <p className="text-sm text-terminal-gray leading-relaxed line-clamp-3">
+                  {article.description}
+                </p>
+                
+                <div className="flex items-center justify-between text-xs border-t border-terminal-gray/10 pt-3">
+                  <div className="flex items-center gap-2 text-terminal-gray">
+                    <Clock className="h-3 w-3" />
+                    <span>{formatTimeAgo(article.publishedAt)}</span>
+                  </div>
+                  {article.author && (
+                    <div className="text-terminal-yellow text-xs font-mono truncate max-w-[100px]">
+                      {article.author}
+                    </div>
+                  )}
+                </div>
+                
+                {article.url !== '#' && (
+                  <div className="pt-2 text-center">
+                    <a 
+                      href={article.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-1 text-terminal-blue hover:text-terminal-yellow transition-colors text-xs font-mono group-hover:scale-105 transform transition-transform duration-200"
+                    >
+                      <span>Saber más</span>
+                    </a>
                   </div>
                 )}
               </div>
-              
-              {article.url !== '#' && (
-                <div className="pt-2 text-center">
-                  <a 
-                    href={article.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-1 text-terminal-blue hover:text-terminal-yellow transition-colors text-xs font-mono group-hover:scale-105 transform transition-transform duration-200"
-                  >
-                    <span>Saber más</span>
-                  </a>
-                </div>
-              )}
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
       
       {error && (

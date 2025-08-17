@@ -131,7 +131,7 @@ DEEPSEEK_API_KEY=tu_deepseek_api_key_aqui
    npm run dev
    ```
 
-   Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
+   Abre [http://localhost:3000] en tu navegador.
 
 ## 📁 Estructura del Proyecto
 
@@ -341,7 +341,7 @@ Creado con ❤️ para la comunidad dev
 ## 🔗 Links Importantes
 
 ### 🌐 **Aplicación Live**
-- **Principal**: https://terminal-time-4lxsbsxsw-imorlabs-projects.vercel.app
+- **Principal**: https://terminal-time.vercel.app
 - **Status**: ✅ Online y funcionando
 
 ### 🛠️ **Administración**

@@ -7,6 +7,11 @@
 
 Una aplicación web que muestra efemérides de programación, noticias tech y información del clima en una interfaz terminal minimalista.
 
+![Code History Day](https://img.shields.io/badge/Next.js-15.2.4-black?style=for-the-badge&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=for-the-badge&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4.17-38B2AC?style=for-the-badge&logo=tailwind-css)
+![Supabase](https://img.shields.io/badge/Supabase-Database-green?style=for-the-badge&logo=supabase)
+
 ## 🌐 **APLICACIÓN LIVE**
 
 🚀 **URL Principal**: https://terminal-time.vercel.app

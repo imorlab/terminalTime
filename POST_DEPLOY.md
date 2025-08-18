@@ -21,7 +21,7 @@
 
 ### 1. Variables de entorno a agregar:
 ```
-DEEPSEEK_API_KEY = sk-...
+DEEPSEEK_API_KEY = sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 ### 2. Configuraciones opcionales:
@@ -64,7 +64,7 @@ DEEPSEEK_API_KEY = sk-...
 
 ### 2. **Configurar API Key:**
 - Settings → Environment Variables
-- Add: `DEEPSEEK_API_KEY` = `...`
+- Add: `DEEPSEEK_API_KEY` = `sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
 - Environment: Production ✅
 
 ### 3. **Obtener URL de producción:**

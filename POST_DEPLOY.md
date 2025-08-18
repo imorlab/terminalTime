@@ -21,7 +21,7 @@
 
 ### 1. Variables de entorno a agregar:
 ```
-DEEPSEEK_API_KEY = sk-9685e5e24526418095ff0de70d6eb1e3
+DEEPSEEK_API_KEY = sk-...
 ```
 
 ### 2. Configuraciones opcionales:

@@ -35,28 +35,6 @@ Una aplicación web que muestra efemérides de programación, noticias tech y in
 - **Despliegue**: Vercel
 - **CI/CD**: GitHub Actions
 
-## 🚀 **Tecnologías Utilizadas**
-
-<div align="center">
-
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-
-![Visual Studio Code](https://img.shields.io/badge/VS_Code-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white)
-![Claude](https://img.shields.io/badge/Claude_4_Sonnet-FF6B35?style=for-the-badge&logo=anthropic&logoColor=white)
-![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
-
-![Supabase](https://img.shields.io/badge/Supabase-181818?style=for-the-badge&logo=supabase&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
-![DeepSeek](https://img.shields.io/badge/DeepSeek-FF4B00?style=for-the-badge&logo=ai&logoColor=white)
-![DeepSeek](https://apipie.ai/docs/img/Models/DeepSeek.png)
-
-</div>
-
 ### 🔑 Variables de entorno necesarias
 
 Solo necesitas **una variable** para funcionalidad completa:

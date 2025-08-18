@@ -1,18 +1,20 @@
-# TerminalTime ⏰
+ ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗  ████████╗██╗███╗   ███╗███████╗
+ ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║  ╚══██╔══╝██║████╗ ████║██╔════╝
+    ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     ██║   ██║██╔████╔██║█████╗  
+    ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║     ██║   ██║██║╚██╔╝██║██╔══╝  
+    ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗██║   ██║██║ ╚═╝ ██║███████╗
+    ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═╝   ╚═╝╚═╝     ╚═╝╚══════╝
+                                                                                                
+    Historia de la programación en tu terminal ⏰
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fimorlab%2FterminalTime)
 
-Historia de la programación en tu terminal. Una aplicación web que muestra efemérides de programación, noticias tech y información del clima en una interfaz terminal minimalista.
+Una aplicación web que muestra efemérides de programación, noticias tech y información del clima en una interfaz terminal minimalista.
 
 ## 🌐 **APLICACIÓN LIVE**
 
 🚀 **URL Principal**: https://terminal-time.vercel.app
-
-📱 **URLs Importantes**:
-- **🌍 Aplicación**: https://terminal-time.vercel.app
-- **🔍 Dashboard**: https://vercel.com/imorlabs-projects/terminal-time/wn5hCN32omHP8jZSrW2D9drLepkA
-- **⚙️ Settings**: https://vercel.com/imorlabs-projects/terminal-time/settings
-- **📊 Analytics**: https://vercel.com/imorlabs-projects/terminal-time/analytics
+✅ **Status**: Online y funcionando
 
 ## ✨ Características
 
@@ -39,15 +41,6 @@ Historia de la programación en tu terminal. Una aplicación web que muestra efe
 - **Iconos**: Lucide React con animaciones
 - **Despliegue**: Vercel
 - **CI/CD**: GitHub Actions
-
-## 🚀 Despliegue Rápido
-
-### ⚡ Deploy en 1 click
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fimorlab%2FterminalTime)
-
-### 🌍 **O visita la aplicación live:**
-**https://terminal-time.vercel.app**
 
 ### 🔑 Variables de entorno necesarias
 
@@ -185,7 +178,7 @@ transition-all duration-300     /* Transiciones suaves */
 - **EphemerideSection**: Layout integrado con mejor tipografía
 - **Dropdowns**: Efectos de hover y transiciones elegantes
 
-## �️ Sistema de Efemérides
+## 🪀 Sistema de Efemérides
 
 ### Arquitectura de 3 Niveles
 1. **🚀 Base de Datos (Supabase)**: Respuestas instantáneas para fechas previamente consultadas
@@ -198,7 +191,7 @@ transition-all duration-300     /* Transiciones suaves */
 - **Resultado formateado**: Estilo terminal con información estructurada
 - **Prompt final**: Cursor parpadeante listo para nuevos comandos
 
-## �🔧 APIs y Servicios
+## 🔧 APIs y Servicios
 
 ### 🧠 DeepSeek AI
 - Generación automática de efemérides históricas reales
@@ -336,19 +329,11 @@ Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
 
 ## 👥 Autor
 
-Creado con ❤️ para la comunidad dev
+**imorlab**: [GitHub](https://github.com/imorlab)
+**Israel Moreno**: [Linkedin](https://www.linkedin.com/in/israelmorenolabrador/)
+Creado con 💜 desde Andalucía para el mundo
 
 ## 🔗 Links Importantes
-
-### 🌐 **Aplicación Live**
-- **Principal**: https://terminal-time.vercel.app
-- **Status**: ✅ Online y funcionando
-
-### 🛠️ **Administración**
-- **Dashboard Vercel**: https://vercel.com/imorlabs-projects/terminal-time/wn5hCN32omHP8jZSrW2D9drLepkA
-- **Settings**: https://vercel.com/imorlabs-projects/terminal-time/settings
-- **Analytics**: https://vercel.com/imorlabs-projects/terminal-time/analytics
-- **Deployments**: https://vercel.com/imorlabs-projects/terminal-time/deployments
 
 ### 📚 **Desarrollo**
 - **Repositorio**: https://github.com/imorlab/terminalTime

@@ -64,7 +64,7 @@ DEEPSEEK_API_KEY = sk-...
 
 ### 2. **Configurar API Key:**
 - Settings → Environment Variables
-- Add: `DEEPSEEK_API_KEY` = `sk-9685e5e24526418095ff0de70d6eb1e3`
+- Add: `DEEPSEEK_API_KEY` = `...`
 - Environment: Production ✅
 
 ### 3. **Obtener URL de producción:**

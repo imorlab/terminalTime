@@ -2,8 +2,8 @@ name: TerminalTime - Generate Daily Ephemeride
 
 on:
   schedule:
-    # Ejecutar todos los días a las 6:00 AM UTC (8:00 AM CEST)
-    - cron: '0 6 * * *'
+    # Ejecutar todos los días a las 00:00 UTC (2:00 AM CEST en verano, 1:00 AM en invierno)
+    - cron: '0 0 * * *'
   workflow_dispatch: # Permitir ejecución manual
 
 jobs:
@@ -27,19 +27,40 @@ jobs:
       env:
         NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
         SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: |
         node -e "
-        const fetch = require('node-fetch');
-        const { createClient } = require('@supabase/supabase-js');
+        const https = require('https');
         
         async function generateEphemeride() {
           try {
-            const response = await fetch('${{ secrets.VERCEL_URL || 'https://your-app.vercel.app' }}/api/ephemerides/today');
-            const data = await response.json();
-            console.log('Efeméride generada:', data.title);
+            console.log('🚀 Iniciando generación diaria de efeméride...');
+            
+            // Usar la URL de producción de Vercel
+            const url = 'https://terminal-time.vercel.app/api/ephemerides/generate-daily';
+            
+            const response = await new Promise((resolve, reject) => {
+              const req = https.get(url, (res) => {
+                let data = '';
+                res.on('data', chunk => data += chunk);
+                res.on('end', () => resolve({ status: res.statusCode, data: JSON.parse(data) }));
+              });
+              req.on('error', reject);
+              req.setTimeout(30000, () => req.destroy(new Error('Timeout')));
+            });
+            
+            console.log('📊 Status:', response.status);
+            console.log('📝 Response:', response.data);
+            
+            if (response.status === 200 && response.data.success) {
+              console.log('✅ Efeméride generada exitosamente');
+            } else {
+              console.log('⚠️ Respuesta inesperada:', response.data);
+            }
           } catch (error) {
-            console.error('Error generando efeméride:', error);
+            console.error('❌ Error generando efeméride:', error.message);
+            process.exit(1);
           }
         }
         
@@ -50,4 +71,4 @@ jobs:
       run: |
         echo "✅ Daily ephemeride generation completed"
         echo "📅 Date: $(date)"
-        echo "🚀 Next execution: tomorrow at 6:00 AM UTC"
+        echo "🚀 Next execution: tomorrow at 00:00 UTC"

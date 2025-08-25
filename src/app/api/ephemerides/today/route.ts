@@ -6,10 +6,18 @@ let supabase: any = null
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-if (supabaseUrl && supabaseKey && 
-    supabaseUrl !== 'your_supabase_url_here' && 
-    supabaseKey !== 'your_supabase_service_role_key_here' &&
-    supabaseUrl.startsWith('http')) {
+// Verificación más estricta para Supabase
+const isSupabaseConfigured = !!(
+  supabaseUrl && 
+  supabaseKey && 
+  supabaseUrl !== 'your_supabase_url_here' && 
+  supabaseKey !== 'your_supabase_service_role_key_here' &&
+  supabaseUrl.startsWith('http') &&
+  supabaseUrl.includes('supabase') &&
+  supabaseKey.startsWith('eyJ')
+)
+
+if (isSupabaseConfigured) {
   try {
     const { createClient } = require('@supabase/supabase-js')
     supabase = createClient(supabaseUrl, supabaseKey)
@@ -19,7 +27,8 @@ if (supabaseUrl && supabaseKey &&
     supabase = null
   }
 } else {
-  console.log('⚠️ Supabase no configurado correctamente, usando solo IA + fallback')
+  console.log('⚠️ Supabase no configurado - funcionando en modo IA + fallback solamente')
+  console.log('📝 Para habilitar BD: configura NEXT_PUBLIC_SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY')
 }
 
 export async function GET(request: NextRequest) {
@@ -28,8 +37,7 @@ export async function GET(request: NextRequest) {
     const useFallback = searchParams.get('fallback') === 'true'
     
     console.log('🔑 DEEPSEEK_API_KEY disponible:', !!process.env.DEEPSEEK_API_KEY)
-    console.log('� DEEPSEEK_API_KEY length:', process.env.DEEPSEEK_API_KEY?.length || 0)
-    console.log('�📅 Generando efeméride para:', new Date().toISOString().split('T')[0])
+    console.log('📅 Generando efeméride para:', new Date().toISOString().split('T')[0])
     console.log('⚡ Usando fallback rápido:', useFallback)
     
     const today = new Date()
@@ -44,9 +52,10 @@ export async function GET(request: NextRequest) {
     
     let ephemeride = null
 
-    // Solo intentar base de datos si Supabase está configurado
+    // PASO 1: Verificar base de datos primero (más rápido)
     if (supabase) {
       try {
+        console.log('🔍 Buscando en base de datos...')
         const { data, error } = await supabase
           .from('ephemerides')
           .select('*')
@@ -54,41 +63,53 @@ export async function GET(request: NextRequest) {
           .single()
         
         if (!error && data) {
+          console.log('✅ Efeméride encontrada en BD')
           ephemeride = data
+          return NextResponse.json(ephemeride) // Retorno inmediato si existe en BD
+        } else {
+          console.log('📅 No hay efeméride para hoy en BD, generando nueva...')
         }
       } catch (dbError) {
-        console.log('DB no disponible, usando generación:', dbError)
+        console.log('❌ Error BD, continuando con generación:', dbError)
       }
     }
     
+    // PASO 2: Si no existe en BD, generar nueva
     if (!ephemeride) {
-      // Si no hay efeméride en DB, generar una nueva
-      console.log('💡 Intentando generar efeméride con IA...')
+      console.log('💡 Generando efeméride con IA...')
       const generatedEphemeride = await generateTodayEphemeride()
       
       if (generatedEphemeride) {
         console.log('✅ Efeméride generada con IA exitosamente')
         ephemeride = generatedEphemeride
         
-        // Solo guardar en DB si Supabase está disponible
+        // PASO 3: Guardar en BD de forma asíncrona (no bloquear respuesta)
         if (supabase) {
-          try {
-            const { data: newEphemeride, error: insertError } = await supabase
-              .from('ephemerides')
-              .insert([generatedEphemeride])
-              .select()
-              .single()
-            
-            if (!insertError && newEphemeride) {
-              ephemeride = newEphemeride
+          // Guardar en background sin esperar
+          setImmediate(async () => {
+            try {
+              console.log('💾 Guardando efeméride en BD...')
+              const { data: newEphemeride, error: insertError } = await supabase
+                .from('ephemerides')
+                .upsert([generatedEphemeride], { 
+                  onConflict: 'date',
+                  ignoreDuplicates: false 
+                })
+                .select()
+                .single()
+              
+              if (!insertError && newEphemeride) {
+                console.log('✅ Efeméride guardada exitosamente en BD')
+              } else {
+                console.log('❌ Error guardando en BD:', insertError)
+              }
+            } catch (saveError) {
+              console.log('❌ Error salvando en BD:', saveError)
             }
-          } catch (saveError) {
-            console.log('No se pudo guardar en DB:', saveError)
-          }
+          })
         }
       } else {
         console.log('⚠️ IA no disponible, usando efemérides curadas')
-        // Usar efemérides curadas de alta calidad
         ephemeride = getTodayEphemeride()
       }
     }

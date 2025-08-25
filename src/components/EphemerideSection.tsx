@@ -46,15 +46,15 @@ function LoadingEphemeride({ onCancel }: { onCancel?: () => void }) {
       setDots(prev => prev.length >= 3 ? '' : prev + '.')
     }, 500)
 
-    // Cambiar pasos cada 2.5 segundos
+    // Cambiar pasos cada 1.5 segundos (más rápido)
     const stepInterval = setInterval(() => {
       setCurrentStep(prev => (prev + 1) % loadingSteps.length)
-    }, 2500)
+    }, 1500)
 
-    // Cambiar facts cada 4 segundos
+    // Cambiar facts cada 3 segundos (más rápido)
     const factInterval = setInterval(() => {
       setCurrentFact(prev => (prev + 1) % programmingFacts.length)
-    }, 4000)
+    }, 3000)
 
     // Contador de tiempo transcurrido
     const timeInterval = setInterval(() => {
@@ -98,8 +98,8 @@ function LoadingEphemeride({ onCancel }: { onCancel?: () => void }) {
         └─ Mientras esperas: <span className="text-terminal-blue">{programmingFacts[currentFact]}</span>
       </div>
       
-      {/* Información adicional después de 8 segundos */}
-      {timeElapsed > 8 && (
+      {/* Información adicional después de 5 segundos */}
+      {timeElapsed > 5 && (
         <div className="mt-4 p-3 bg-terminal-bg/30 border-l-4 border-terminal-yellow rounded-r">
           <div className="text-terminal-yellow text-sm mb-1">🤖 Generación con IA</div>
           <div className="text-terminal-gray text-sm">
@@ -110,7 +110,7 @@ function LoadingEphemeride({ onCancel }: { onCancel?: () => void }) {
       )}
       
       {/* Advertencia si tarda mucho */}
-      {timeElapsed > 20 && (
+      {timeElapsed > 12 && (
         <>
           <div className="output-line text-terminal-red">
             ⚠️ La generación está tardando más de lo esperado. Esto puede deberse a alta demanda en el servicio de IA.
@@ -200,12 +200,12 @@ export default function EphemerideSection({ onLoadingChange, shouldStartFetch = 
       
       // Calcular tiempo transcurrido
       const elapsedTime = Date.now() - startTime
-      const minLoadingTime = 3000 // 3 segundos adicionales mínimo para que se vea el loading
+      const minLoadingTime = 1500 // Reducido a 1.5 segundos para carga más rápida
       
-      // Si la carga fue muy rápida (desde DB), añadir delay adicional
+      // Si la carga fue muy rápida (desde DB), añadir delay mínimo
       if (elapsedTime < minLoadingTime) {
         const remainingTime = minLoadingTime - elapsedTime
-        console.log(`⏱️ Carga rápida detectada (${elapsedTime}ms), añadiendo delay adicional de ${remainingTime}ms`)
+        console.log(`⏱️ Carga rápida detectada (${elapsedTime}ms), añadiendo delay mínimo de ${remainingTime}ms`)
         await new Promise(resolve => setTimeout(resolve, remainingTime))
       }
       

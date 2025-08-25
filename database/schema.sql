@@ -17,13 +17,49 @@ CREATE INDEX IF NOT EXISTS idx_ephemerides_category ON ephemerides(category);
 -- Habilitar Row Level Security
 ALTER TABLE ephemerides ENABLE ROW LEVEL SECURITY;
 
--- Política para permitir lectura pública
+-- Eliminar políticas existentes si existen y crear nuevas
+DO $$
+BEGIN
+    -- Eliminar política de lectura si existe
+    IF EXISTS (
+        SELECT 1 FROM pg_policies 
+        WHERE tablename = 'ephemerides' 
+        AND policyname = 'Permitir lectura pública de efemérides'
+    ) THEN
+        DROP POLICY "Permitir lectura pública de efemérides" ON ephemerides;
+    END IF;
+    
+    -- Eliminar política de inserción si existe
+    IF EXISTS (
+        SELECT 1 FROM pg_policies 
+        WHERE tablename = 'ephemerides' 
+        AND policyname = 'Permitir inserción desde servicio'
+    ) THEN
+        DROP POLICY "Permitir inserción desde servicio" ON ephemerides;
+    END IF;
+END $$;
+
+-- Crear políticas nuevas
 CREATE POLICY "Permitir lectura pública de efemérides" ON ephemerides
   FOR SELECT USING (true);
 
--- Política para permitir inserción solo desde el servicio
 CREATE POLICY "Permitir inserción desde servicio" ON ephemerides
   FOR INSERT WITH CHECK (true);
+
+-- Política para permitir actualizaciones (upsert)
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM pg_policies 
+        WHERE tablename = 'ephemerides' 
+        AND policyname = 'Permitir actualización desde servicio'
+    ) THEN
+        DROP POLICY "Permitir actualización desde servicio" ON ephemerides;
+    END IF;
+END $$;
+
+CREATE POLICY "Permitir actualización desde servicio" ON ephemerides
+  FOR UPDATE USING (true) WITH CHECK (true);
 
 -- Insertar datos de ejemplo
 INSERT INTO ephemerides (id, date, title, description, year, category) VALUES

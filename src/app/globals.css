@@ -122,4 +122,47 @@
   .slide-up-delay-3 {
     animation: slideUp 0.6s ease-out 0.3s both;
   }
+
+  /* Cursor más grueso para el input del terminal */
+  .thick-terminal-cursor {
+    caret-color: #7ce38b;
+  }
+
+  .thick-terminal-cursor:focus {
+    caret-color: #7ce38b;
+  }
+
+  /* Cursor terminal oculto - lo manejaremos con JS */
+  .terminal-block-cursor {
+    caret-color: transparent;
+  }
+
+  .terminal-block-cursor:focus {
+    caret-color: transparent;
+  }
+
+  /* Cursor simulado que se posiciona dinámicamente */
+  .terminal-cursor-overlay {
+    position: absolute;
+    width: 8px;
+    height: 1.2em;
+    background-color: #7ce38b;
+    pointer-events: none;
+    animation: cursor-blink-overlay 1s infinite;
+    top: 0;
+    z-index: 10;
+    left: var(--cursor-left, 8px);
+  }
+
+  @keyframes cursor-blink-overlay {
+    0%, 50% { 
+      opacity: 1;
+    }
+    51%, 100% { 
+      opacity: 0;
+    }
+  }
+
+ 
+
 }

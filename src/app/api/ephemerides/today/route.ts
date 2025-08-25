@@ -167,11 +167,17 @@ async function generateTodayEphemeride() {
 IMPORTANTE: Responde ÚNICAMENTE con un JSON válido, sin markdown, sin bloques de código, sin texto adicional. Solo el JSON:
 
 {
-  "title": "Título del evento",
-  "description": "Descripción detallada del evento (mínimo 100 palabras)",
+  "title": "Título del evento (máximo 80 caracteres)",
+  "description": "Descripción detallada del evento (EXACTAMENTE entre 400-500 caracteres, completa y bien redactada)",
   "year": año_del_evento,
   "category": "Categoría del evento"
-}`
+}
+
+REQUISITOS ESPECÍFICOS:
+- La descripción debe tener entre 400-500 caracteres
+- Debe ser informativa y completa en ese espacio
+- No uses puntos suspensivos ni cortes abruptos
+- Incluye detalles relevantes del evento histórico`
           }
         ],
         max_tokens: 500,

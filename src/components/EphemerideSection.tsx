@@ -113,7 +113,7 @@ function InteractiveTerminal() {
     
     whoami: () => [
       '👨‍💻 imorlab@dev',
-      '🏠 Ubicación: ~/terminaltime',
+      '🏠 Ubicación: ~/andalucia',
       '🎯 Misión: Explorar la historia de la programación',
       '⚡ Estado: Activo y explorando'
     ],

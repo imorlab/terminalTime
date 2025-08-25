@@ -46,7 +46,7 @@ export default function Footer() {
               className="text-terminal-blue hover:text-terminal-yellow transition-colors inline-block items-center gap-1 sm:ml-1"
             >
               Desarrollado con 
-              <span className="text-purple-400"> 💜 </span> 
+              <span className="text-purple-400 animate-pulse"> 💜 </span> 
               desde Andalucía para el mundo
             
             </a>

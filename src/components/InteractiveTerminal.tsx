@@ -27,16 +27,17 @@ export default function InteractiveTerminal() {
   const commands = {
     help: () => [
       '📚 Comandos disponibles:',
-      '  help     - Muestra esta ayuda',
-      '  clear    - Limpia la terminal',
-      '  date     - Muestra la fecha actual',
-      '  whoami   - Información del usuario',
-      '  fortune  - Frase tech aleatoria',
-      '  history  - Historial de comandos',
-      '  joke     - Chiste de programadores',
-      '  cowsay   - ASCII art con mensaje',
-      '  weather  - Estado del clima',
-      '  exit     - Salir del modo interactivo'
+      '  help             - Muestra esta ayuda',
+      '  clear            - Limpia la terminal',
+      '  date             - Muestra la fecha actual',
+      '  whoami           - Información del usuario',
+      '  fortune          - Frase tech aleatoria',
+      '  history          - Historial de comandos',
+      '  joke             - Chiste de programadores',
+      '  cowsay           - ASCII art con mensaje',
+      '  weather          - Estado del clima',
+      '  refresh-ephemeride - Regenera la efeméride del día',
+      '  exit             - Salir del modo interactivo'
     ],
     
     clear: () => {
@@ -112,6 +113,26 @@ export default function InteractiveTerminal() {
     history: () => {
       if (history.length === 0) return ['📝 Historial vacío']
       return ['📜 Historial de comandos:', ...history.map((cmd, i) => `  ${i + 1}. ${cmd}`)]
+    },
+
+    'refresh-ephemeride': async () => {
+      try {
+        setOutput(prev => [...prev, '🔄 Regenerando efeméride del día...'])
+        const response = await fetch('/api/ephemerides/today?force=true')
+        if (response.ok) {
+          const data = await response.json()
+          setOutput(prev => [...prev, 
+            '✅ Nueva efeméride generada exitosamente:',
+            `📅 ${data.year}: ${data.title}`,
+            '💡 Recarga la página para ver la nueva efeméride'
+          ])
+        } else {
+          setOutput(prev => [...prev, '❌ Error al regenerar efeméride'])
+        }
+      } catch (error) {
+        setOutput(prev => [...prev, '❌ Error de conexión al regenerar efeméride'])
+      }
+      return []
     }
   }
 

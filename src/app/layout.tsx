@@ -11,6 +11,18 @@ export const metadata: Metadata = {
   description: 'Descubre efemérides de programación, noticias tech y clima en una interfaz terminal. Historia diaria del desarrollo de software y tecnología.',
   keywords: ['programación', 'historia', 'tecnología', 'efemérides', 'desarrollo', 'terminal', 'tech news'],
   authors: [{ name: 'TerminalTime' }],
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' }
+    ],
+    apple: '/apple-touch-icon.png',
+    shortcut: '/favicon.ico'
+  },
+  appleWebApp: {
+    title: 'TerminalTime',
+  },
   openGraph: {
     title: 'TerminalTime - Historia de la Programación',
     description: 'Tu dosis diaria de historia tech en una terminal minimalista',

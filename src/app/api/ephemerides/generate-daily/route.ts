@@ -23,8 +23,12 @@ export async function GET(request: NextRequest) {
   try {
     console.log('🕐 CRON JOB: Generación diaria iniciada a las', new Date().toISOString())
     
-    const today = new Date()
-    const todayString = today.toISOString().split('T')[0]
+    // Usar zona horaria de Madrid para determinar la fecha
+    const madridDate = new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Madrid" })
+    const todayString = madridDate // Formato YYYY-MM-DD confiable
+    
+    console.log('🌍 Fecha UTC:', new Date().toISOString().split('T')[0])
+    console.log('🇪🇸 Fecha Madrid:', todayString)
     
     // Verificar si ya existe una efeméride para hoy
     if (supabase) {
@@ -40,7 +44,8 @@ export async function GET(request: NextRequest) {
           return NextResponse.json({ 
             success: true, 
             message: 'Efeméride ya existe para hoy',
-            date: todayString 
+            date: todayString,
+            timezone: 'Europe/Madrid'
           })
         }
       } catch (error) {
@@ -126,9 +131,16 @@ async function generateTodayEphemeride() {
   }
   
   try {
-    const today = new Date()
-    const month = today.toLocaleDateString('es-ES', { month: 'long' })
-    const day = today.getDate()
+    // Usar fecha de Madrid para consistencia
+    const todayString = new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Madrid" })
+    const madridDate = new Date().toLocaleDateString("es-ES", { 
+      timeZone: "Europe/Madrid",
+      day: 'numeric',
+      month: 'long'
+    })
+    const [day, month] = madridDate.split(' de ')
+    
+    console.log('🇪🇸 CRON: Generando para fecha Madrid:', todayString, `(${day} de ${month})`)
     
     const response = await fetch(apiUrl, {
       method: 'POST',
@@ -189,7 +201,7 @@ REQUISITOS ESPECÍFICOS:
     
     return {
       id: `daily-${Date.now()}`,
-      date: today.toISOString().split('T')[0],
+      date: todayString,
       title: ephemeride.title,
       description: ephemeride.description,
       year: ephemeride.year,

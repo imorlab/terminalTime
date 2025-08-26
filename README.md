@@ -1,203 +1,109 @@
 # TerminalTime ⏰
 
-## 🎯 Tagline
-> "Historia de la programación en tu terminal"
+> **Historia de la programación en tu terminal**
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fimorlab%2FterminalTime)
+[![Deploy](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fimorlab%2FterminalTime)
+![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)
+![Tailwind](https://img.shields.io/badge/Tailwind-3.4-38B2AC?logo=tailwind-css)
 
-Una aplicación web que muestra efemérides de programación, noticias tech y información del clima en una interfaz terminal minimalista.
-
-![Code History Day](https://img.shields.io/badge/Next.js-15.2.4-black?style=for-the-badge&logo=next.js)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=for-the-badge&logo=typescript)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4.17-38B2AC?style=for-the-badge&logo=tailwind-css)
-![Supabase](https://img.shields.io/badge/Supabase-Database-green?style=for-the-badge&logo=supabase)
-
-## 🌐 **APLICACIÓN LIVE**
-
-🚀 **URL Principal**: https://terminal-time.vercel.app
-✅ **Status**: Online y funcionando
+🚀 **Demo**: https://terminal-time.vercel.app
 
 ## ✨ Características
 
-- **🗓️ Efemérides Inteligentes**: Sistema de 3 niveles (Base de datos → IA → Fallback) con efectos de terminal realistas
-- **🌤️ Clima Inteligente**: Selector de 30 ciudades españolas con datos meteorológicos en tiempo real (columna lateral)
-- **📰 Noticias Tech**: Agregador de Medium RSS con filtros de calidad avanzados e imágenes optimizadas
-- **💻 Interfaz Terminal Moderna**: Layout 10/2 columnas - terminal principal (83%) y clima lateral (17%)
-- **🤖 IA con DeepSeek**: Generación automática de efemérides personalizadas con guardado en base de datos
-- **📱 Diseño Responsivo**: Layout adaptativo - terminal ocupa 10 cols, clima 2 cols en desktop
-- **🎨 Efectos Visuales**: Animaciones de máquina de escribir, cursores parpadeantes y transiciones suaves
-- **🔄 Auto-refresh**: Las efemérides se actualizan automáticamente cada día
-- **🏙️ Selector de Ciudades**: Dropdown elegante con 30 ciudades principales de España
-- **⚡ Mock Data**: Funcionalidad completa incluso sin APIs configuradas
+- **🗓️ Efemérides Diarias**: Eventos históricos de programación generados con IA
+- **🌤️ Clima**: Información meteorológica para 30+ ciudades españolas  
+- **📰 Noticias Tech**: Agregador de contenido tecnológico de Medium
+- **💻 Terminal Interactiva**: Interfaz que simula una terminal real con comandos
+- **🤖 IA Integrada**: Generación automática con DeepSeek AI
+- **📱 Responsivo**: Diseño adaptativo con tema terminal moderno
 
-## 🛠️ Stack Tecnológico
-
-- **Frontend**: Next.js 15, React 18, TypeScript
-- **Estilos**: Tailwind CSS con tema terminal personalizado + efectos glassmorphism
-- **Base de datos**: Supabase (PostgreSQL) - Opcional
-- **APIs**: DeepSeek AI, Medium RSS (noticias tech), Open-Meteo (clima)
-- **Iconos**: Lucide React con animaciones
-- **Despliegue**: Vercel
-- **CI/CD**: GitHub Actions
-
-### 🔑 Variables de entorno necesarias
-
-Solo necesitas **una variable** para funcionalidad completa:
+## 🚀 Desarrollo Local
 
 ```bash
-DEEPSEEK_API_KEY=tu_deepseek_api_key_aqui
+# Clonar e instalar
+git clone https://github.com/imorlab/terminalTime.git
+cd terminalTime
+npm install
+
+# Configurar (opcional)
+cp .env.example .env.local
+# Añadir DEEPSEEK_API_KEY para IA
+
+# Ejecutar
+npm run dev
 ```
 
-**¿Sin API key?** ¡No problem! La app funciona con contenido de ejemplo.
+Abre http://localhost:3000
 
-## 🏃‍♂️ Desarrollo Local
+## 🛠️ Stack
 
-### Prerrequisitos
+- **Frontend**: Next.js 15, React 18, TypeScript, Tailwind CSS
+- **Backend**: Supabase (PostgreSQL), DeepSeek AI, Open-Meteo, Medium RSS
+- **Deploy**: Vercel, GitHub Actions
 
-- Node.js 18+ 
-- npm o yarn
-- API Key de DeepSeek (opcional)
+## � Variables de Entorno
 
-### Instalación
+```env
+# IA (opcional - funciona con fallback)
+DEEPSEEK_API_KEY=tu_deepseek_api_key
 
-1. **Clona el repositorio**
-   ```bash
-   git clone https://github.com/imorlab/terminalTime.git
-   cd terminalTime
-   ```
+# Base de datos (opcional - funciona con mock data)  
+NEXT_PUBLIC_SUPABASE_URL=tu_supabase_url
+SUPABASE_SERVICE_ROLE_KEY=tu_service_role_key
 
-2. **Instala dependencias**
-   ```bash
-   npm install
-   ```
+# Clima (opcional - tiene fallback)
+OPENWEATHER_API_KEY=tu_openweather_key
+```
 
-3. **Configura variables de entorno**
-   ```bash
-   cp .env.example .env.local
-   ```
-   
-   Edita `.env.local` con tus API keys:
-   ```env
-   # IA para generación de efemérides (recomendado)
-   DEEPSEEK_API_KEY=tu_deepseek_api_key_aqui
-   
-   # Base de datos (opcional - funciona con mock data)
-   NEXT_PUBLIC_SUPABASE_URL=tu_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_supabase_anon_key
-   SUPABASE_SERVICE_ROLE_KEY=tu_supabase_service_role_key
-   
-   # Clima (opcional - tiene fallback)
-   OPENWEATHER_API_KEY=tu_openweather_api_key
-   ```
+## 🎯 Funcionalidades Clave
 
-4. **Configura la base de datos (opcional)**
-   
-   El sistema funciona con un esquema de 3 niveles:
-   - **🚀 Base de datos**: Respuestas instantáneas (cuando está configurada)
-   - **🤖 IA DeepSeek**: Generación automática + guardado en DB
-   - **📋 Fallback**: Datos curados de alta calidad
-   
-   Para configurar Supabase:
-   ```sql
-   -- Ejecuta en SQL Editor de Supabase Dashboard
-   -- El schema completo está en: database/schema.sql
-   CREATE TABLE ephemerides (
-     id TEXT PRIMARY KEY,
-     date DATE NOT NULL UNIQUE,
-     title TEXT NOT NULL,
-     description TEXT NOT NULL,
-     year INTEGER NOT NULL,
-     category TEXT NOT NULL,
-     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-   );
-   
-   -- Políticas RLS para acceso público
-   ALTER TABLE ephemerides ENABLE ROW LEVEL SECURITY;
-   CREATE POLICY "public_read" ON ephemerides FOR SELECT USING (true);
-   CREATE POLICY "service_write" ON ephemerides FOR INSERT WITH CHECK (true);
-   ```
+### Terminal Interactiva
+- Comandos ejecutables: `help`, `date`, `weather`, `joke`, etc.
+- Efectos de escritura y cursor parpadeante
+- Comando `refresh-ephemeride` para regenerar contenido
 
-5. **Ejecuta en modo desarrollo**
-   ```bash
-   npm run dev
-   ```
+### Sistema de Efemérides  
+1. **Base de datos** → respuesta instantánea
+2. **IA generación** → contenido único guardado automáticamente  
+3. **Fallback** → datos curados de calidad
 
-   Abre [http://localhost:3000] en tu navegador.
+### Automatización
+- **GitHub Actions**: Genera nuevas efemérides diariamente a las 00:00 Madrid
+- **Prevención duplicados**: IA evita contenido repetido
+- **Zona horaria**: Sistema corregido para horario español
 
-## 📁 Estructura del Proyecto
+## 📁 Estructura
 
 ```
 src/
 ├── app/
-│   ├── api/                    # API Routes
-│   │   ├── ephemerides/
-│   │   │   └── today/
-│   │   ├── weather/
-│   │   └── news/
-│   │       └── tech/
-│   ├── globals.css             # Estilos globales
-│   ├── layout.tsx              # Layout principal
-│   └── page.tsx                # Página principal
-├── components/                 # Componentes React
-│   ├── TerminalHeader.tsx      # Header de la terminal
-│   ├── CommandLine.tsx         # Línea de comandos
-│   ├── EphemerideSection.tsx   # Sección de efemérides
-│   ├── WeatherSection.tsx      # Sección del clima con selector de ciudades
-│   ├── NewsSection.tsx         # Grid de noticias en 3 columnas
-│   ├── LoadingSpinner.tsx      # Spinner de carga
-│   └── Footer.tsx              # Footer de la aplicación
+│   ├── api/              # API Routes
+│   └── page.tsx          # Página principal
+├── components/           # Componentes React modulares
+│   ├── EphemerideSection.tsx
+│   ├── InteractiveTerminal.tsx
+│   ├── TypewriterText.tsx
+│   └── ...
+└── data/                 # Datos de fallback
 ```
 
-## 🎨 Tema Terminal Moderno
+## 🔧 Scripts
 
-El proyecto usa un tema personalizado que simula una terminal moderna con efectos glassmorphism:
-
-```css
-/* Colores principales */
-terminal-bg: #0d1117      /* Fondo principal */
-terminal-text: #f0f6fc    /* Texto principal */
-terminal-green: #7ce38b   /* Verde terminal */
-terminal-blue: #58a6ff    /* Azul terminal */
-terminal-yellow: #f2cc60  /* Amarillo terminal */
-terminal-red: #f85149     /* Rojo terminal */
-terminal-gray: #8b949e    /* Gris terminal */
-
-/* Efectos modernos */
-backdrop-blur-sm          /* Efecto glassmorphism */
-bg-gradient-to-br         /* Gradientes sutiles */
-hover:border-terminal-green/30  /* Hover effects */
-transition-all duration-300     /* Transiciones suaves */
+```bash
+npm run dev          # Desarrollo
+npm run build        # Build producción  
+npm run start        # Servidor producción
+npm run lint         # Linting
 ```
 
-### 🎭 Componentes Estilizados
+## 📄 Licencia
 
-- **WeatherSection**: Glassmorphism con animaciones de hover
-- **NewsSection**: Grid responsivo con cards individuales
-- **EphemerideSection**: Layout integrado con mejor tipografía
-- **Dropdowns**: Efectos de hover y transiciones elegantes
+MIT License - ver [LICENSE](LICENSE)
 
-## 🪀 Sistema de Efemérides
+---
 
-### Arquitectura de 3 Niveles
-1. **🚀 Base de Datos (Supabase)**: Respuestas instantáneas para fechas previamente consultadas
-2. **🤖 IA (DeepSeek)**: Genera efemérides históricas reales y las guarda automáticamente
-3. **📋 Fallback Estático**: Datos curados de alta calidad como último recurso
-
-### Flujo de Terminal Realista
-- **Comando con efecto máquina de escribir**: `./daily-ephemerides.sh`
-- **Loading dinámico**: Pasos de progreso, datos curiosos y timing natural
-- **Resultado formateado**: Estilo terminal con información estructurada
-- **Prompt final**: Cursor parpadeante listo para nuevos comandos
-
-## 🔧 APIs y Servicios
-
-### 🧠 DeepSeek AI
-- Generación automática de efemérides históricas reales
-- Endpoint: `https://api.deepseek.com/chat/completions`
-- **Auto-guardado**: Las efemérides generadas se almacenan en Supabase
-- Fallback: Contenido curado estático
-
-### 🌤️ Open-Meteo (Clima)
+**Desarrollado por** [@imorlab](https://github.com/imorlab) | **Stack**: Next.js + TypeScript + Tailwind + AI
 - Datos meteorológicos gratuitos y precisos
 - Endpoint: `https://api.open-meteo.com/v1/forecast`
 - Soporte para 30 ciudades españolas
@@ -277,7 +183,7 @@ El proyecto incluye un workflow para automatización:
 name: Generate Daily Ephemeride
 on:
   schedule:
-    - cron: '0 6 * * *'  # Diario a las 6:00 AM UTC
+    - cron: '0 22 * * *'  # Diario a las 10:00 PM UTC
 ```
 
 ## 📊 Características Técnicas
@@ -341,7 +247,7 @@ Creado con 💜 desde Andalucía para el mundo
 ### 🔧 **APIs Utilizadas**
 - **DeepSeek**: https://platform.deepseek.com/
 - **Open-Meteo**: https://open-meteo.com/
-- **Menéame RSS**: https://www.meneame.net/rss2.php
+- **Medium RSS**: https://medium.com/feed/tag/tecnología
 
 ---
 

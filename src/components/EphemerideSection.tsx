@@ -35,7 +35,6 @@ export default function EphemerideSection({ onLoadingChange, shouldStartFetch = 
     const interval = setInterval(() => {
       const today = new Date().toISOString().split('T')[0]
       if (currentDate && currentDate !== today && shouldStartFetch) {
-        console.log('📅 Nuevo día detectado, refrescando efeméride...')
         fetchTodayEphemeride()
       }
     }, 60000) // Verificar cada minuto
@@ -88,13 +87,11 @@ export default function EphemerideSection({ onLoadingChange, shouldStartFetch = 
       // Si la carga fue muy rápida (desde DB), añadir delay mínimo
       if (elapsedTime < minLoadingTime) {
         const remainingTime = minLoadingTime - elapsedTime
-        console.log(`⏱️ Carga rápida detectada (${elapsedTime}ms), añadiendo delay mínimo de ${remainingTime}ms`)
         await new Promise(resolve => setTimeout(resolve, remainingTime))
       }
       
       setEphemeride(data)
     } catch (err) {
-      console.log('Error API efemérides:', err)
       setError(err instanceof Error ? err.message : 'API no disponible')
     } finally {
       setLoading(false)

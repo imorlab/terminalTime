@@ -21,14 +21,12 @@ if (isSupabaseConfigured) {
   try {
     const { createClient } = require('@supabase/supabase-js')
     supabase = createClient(supabaseUrl, supabaseKey)
-    console.log('✅ Supabase client creado exitosamente')
   } catch (error) {
     console.log('❌ Error creando cliente Supabase:', error)
     supabase = null
   }
 } else {
   console.log('⚠️ Supabase no configurado - funcionando en modo IA + fallback solamente')
-  console.log('📝 Para habilitar BD: configura NEXT_PUBLIC_SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY')
 }
 
 export async function GET(request: NextRequest) {
@@ -37,19 +35,11 @@ export async function GET(request: NextRequest) {
     const useFallback = searchParams.get('fallback') === 'true'
     const forceGenerate = searchParams.get('force') === 'true'
     
-    console.log('🔑 DEEPSEEK_API_KEY disponible:', !!process.env.DEEPSEEK_API_KEY)
-    console.log('📅 Generando efeméride para:', new Date().toISOString().split('T')[0])
-    console.log('📅 Fecha completa:', new Date().toISOString())
-    console.log('📅 Fecha local:', new Date().toLocaleDateString('es-ES'))
-    console.log('⚡ Usando fallback rápido:', useFallback)
-    console.log('🚀 Forzar generación nueva:', forceGenerate)
-    
     const today = new Date()
     const todayString = today.toISOString().split('T')[0]
     
     // Si se solicita fallback, ir directamente a datos estáticos
     if (useFallback) {
-      console.log('⚡ Modo fallback: usando datos curados rápidos')
       const fallbackEphemeride = getTodayEphemeride()
       return NextResponse.json(fallbackEphemeride)
     }
@@ -59,7 +49,6 @@ export async function GET(request: NextRequest) {
     // PASO 1: Verificar base de datos primero (más rápido) - excepto si se fuerza generación
     if (supabase && !forceGenerate) {
       try {
-        console.log('🔍 Buscando en base de datos para fecha:', todayString)
         const { data, error } = await supabase
           .from('ephemerides')
           .select('*')
@@ -67,28 +56,16 @@ export async function GET(request: NextRequest) {
           .single()
         
         if (!error && data) {
-          console.log('✅ Efeméride encontrada en BD:', {
-            id: data.id,
-            date: data.date,
-            title: data.title.substring(0, 50) + '...'
-          })
           ephemeride = data
           return NextResponse.json(ephemeride) // Retorno inmediato si existe en BD
-        } else {
-          console.log('📅 No hay efeméride para hoy en BD, generando nueva...')
-          console.log('📝 Error BD (esperado si no existe):', error?.message)
         }
       } catch (dbError) {
         console.log('❌ Error BD, continuando con generación:', dbError)
       }
-    } else if (forceGenerate) {
-      console.log('🚀 Saltando búsqueda en BD por generación forzada')
     }
     
     // PASO 2: Si no existe en BD, generar nueva
     if (!ephemeride) {
-      console.log('💡 Generando efeméride con IA...')
-      
       // Obtener efemérides recientes para evitar duplicados
       let recentEphemerides: any[] = []
       if (supabase) {
@@ -102,19 +79,14 @@ export async function GET(request: NextRequest) {
             .order('date', { ascending: false })
           
           recentEphemerides = recent || []
-          console.log('📚 Encontradas', recentEphemerides.length, 'efemérides recientes para evitar duplicados')
-          if (recentEphemerides.length > 0) {
-            console.log('📋 Temas a evitar:', recentEphemerides.map(e => `${e.title} (${e.year})`).join(', '))
-          }
         } catch (err) {
-          console.log('⚠️ No se pudieron obtener efemérides recientes:', err)
+          // Silenciar error de efemérides recientes
         }
       }
       
       const generatedEphemeride = await generateTodayEphemeride(recentEphemerides)
       
       if (generatedEphemeride) {
-        console.log('✅ Efeméride generada con IA exitosamente')
         ephemeride = generatedEphemeride
         
         // PASO 3: Guardar en BD de forma asíncrona (no bloquear respuesta)
@@ -122,7 +94,6 @@ export async function GET(request: NextRequest) {
           // Guardar en background sin esperar
           setImmediate(async () => {
             try {
-              console.log('💾 Guardando efeméride en BD...')
               const { data: newEphemeride, error: insertError } = await supabase
                 .from('ephemerides')
                 .upsert([generatedEphemeride], { 
@@ -132,9 +103,7 @@ export async function GET(request: NextRequest) {
                 .select()
                 .single()
               
-              if (!insertError && newEphemeride) {
-                console.log('✅ Efeméride guardada exitosamente en BD')
-              } else {
+              if (insertError) {
                 console.log('❌ Error guardando en BD:', insertError)
               }
             } catch (saveError) {
@@ -143,7 +112,6 @@ export async function GET(request: NextRequest) {
           })
         }
       } else {
-        console.log('⚠️ IA no disponible, usando efemérides curadas')
         ephemeride = getTodayEphemeride()
       }
     }
@@ -166,13 +134,7 @@ async function generateTodayEphemeride(recentEphemerides: any[] = []) {
     : 'https://api.openai.com/v1/chat/completions'
   const model = process.env.DEEPSEEK_API_KEY ? 'deepseek-chat' : 'gpt-4'
   
-  console.log('🔑 API Key disponible:', !!apiKey)
-  console.log('🔑 API Key length:', apiKey?.length || 0)
-  console.log('🌐 Using API:', process.env.DEEPSEEK_API_KEY ? 'DeepSeek' : 'OpenAI')
-  console.log('🤖 Model:', model)
-  
   if (!apiKey) {
-    console.log('❌ No API key disponible')
     return null
   }
   
@@ -228,13 +190,10 @@ REQUISITOS ESPECÍFICOS:
     
     if (!response.ok) {
       const errorText = await response.text()
-      console.log('❌ Error en API response:', response.status, response.statusText)
-      console.log('❌ Error details:', errorText)
       throw new Error(`Error en la API de ${process.env.DEEPSEEK_API_KEY ? 'DeepSeek' : 'OpenAI'}: ${response.status} - ${errorText}`)
     }
     
     const data = await response.json()
-    console.log('✅ Respuesta de API recibida:', !!data.choices?.[0]?.message?.content)
     let content = data.choices[0]?.message?.content
     
     if (!content) {
@@ -243,7 +202,6 @@ REQUISITOS ESPECÍFICOS:
     
     // Limpiar markdown de la respuesta si existe
     content = content.replace(/```json\s*/g, '').replace(/```\s*$/g, '').trim()
-    console.log('🧹 Contenido limpiado:', content.substring(0, 100) + '...')
     
     const ephemeride = JSON.parse(content)
     

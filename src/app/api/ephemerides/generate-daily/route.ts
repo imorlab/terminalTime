@@ -122,9 +122,6 @@ async function generateTodayEphemeride() {
     : 'https://api.openai.com/v1/chat/completions'
   const model = process.env.DEEPSEEK_API_KEY ? 'deepseek-chat' : 'gpt-4'
   
-  console.log('🔑 CRON: API Key disponible:', !!apiKey)
-  console.log('🌐 CRON: Using API:', process.env.DEEPSEEK_API_KEY ? 'DeepSeek' : 'OpenAI')
-  
   if (!apiKey) {
     console.log('❌ CRON: No API key disponible')
     return null
@@ -195,7 +192,6 @@ REQUISITOS ESPECÍFICOS:
     
     // Limpiar markdown de la respuesta si existe
     content = content.replace(/```json\s*/g, '').replace(/```\s*$/g, '').trim()
-    console.log('🧹 CRON: Contenido limpiado:', content.substring(0, 100) + '...')
     
     const ephemeride = JSON.parse(content)
     

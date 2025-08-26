@@ -32,8 +32,6 @@ const MEDIUM_TOPICS: MediumTopic[] = [
 
 export async function GET(request: Request) {
   try {
-    console.log('🔄 Obteniendo noticias de Medium RSS feeds... [v3]')
-    
     // Obtener categorías desde URL params o usar las por defecto
     const { searchParams } = new URL(request.url)
     const categoriesParam = searchParams.get('categories')
@@ -45,11 +43,9 @@ export async function GET(request: Request) {
       enabledTopics = MEDIUM_TOPICS.filter(topic => 
         requestedCategories.includes(topic.slug)
       )
-      console.log(`📋 Topics solicitados [v3]: ${enabledTopics.map(t => t.name).join(', ')}`)
     } else {
       // Usar configuración por defecto
       enabledTopics = MEDIUM_TOPICS.filter(topic => topic.enabled)
-      console.log(`📋 Topics por defecto [v3]: ${enabledTopics.map(t => t.name).join(', ')}`)
     }
     
     // Obtener artículos de todos los topics habilitados en paralelo
@@ -68,7 +64,6 @@ export async function GET(request: Request) {
     })
     
     if (allArticles.length === 0) {
-      console.log('📰 Sin artículos de Medium, usando noticias curadas')
       const curatedNews = getCuratedTechNews()
       return NextResponse.json({ articles: curatedNews })
     }
@@ -77,7 +72,6 @@ export async function GET(request: Request) {
     const shuffledArticles = shuffleArray(allArticles)
     const finalArticles = shuffledArticles.slice(0, 12)
     
-    console.log(`🎯 Devolviendo ${finalArticles.length} artículos de Medium [v3]`)
     return NextResponse.json({ articles: finalArticles })
     
   } catch (error) {
@@ -85,7 +79,6 @@ export async function GET(request: Request) {
     
     // Fallback con noticias curadas
     const fallbackNews = getCuratedTechNews()
-    console.log(`🔄 Fallback: Devolviendo ${fallbackNews.length} noticias curadas`)
     return NextResponse.json({ articles: fallbackNews })
   }
 }
@@ -225,8 +218,6 @@ async function fetchMediumRSS(topicSlug: string, topicName: string): Promise<New
       ? `https://medium.com/feed/tag/${topicSlug}`
       : `https://medium.com/feed/topic/${topicSlug}`
     
-    console.log(`🔄 Fetching Medium RSS: ${baseUrl}`)
-    
     const response = await fetch(baseUrl, {
       headers: {
         'User-Agent': 'TerminalTime-MediumBot/1.0',
@@ -317,7 +308,6 @@ async function fetchMediumRSS(topicSlug: string, topicName: string): Promise<New
     
     // Aplicar filtros de calidad antes de retornar
     const filteredArticles = filterQualityArticles(articles)
-    console.log(`🔍 ${topicName}: ${articles.length} → ${filteredArticles.length} artículos después de filtros`)
     
     // Tomar solo los mejores 3 artículos filtrados
     return filteredArticles.slice(0, 3)

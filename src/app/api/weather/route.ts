@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
         cityName = geoData.city || geoData.locality || geoData.principalSubdivision || 'Unknown Location'
       }
     } catch (geoError) {
-      console.log('Error getting city name:', geoError)
+      // Silenciar error de geocodificación
     }
     
     // Mapear los datos a nuestro formato

@@ -103,7 +103,6 @@ export default function NewsSection() {
       setAllNews(newsData)
       setNewsOffset(0)
     } catch (err) {
-      console.log('Error API noticias:', err)
       setError('API no disponible')
       // En caso de error total, usar datos de ejemplo mínimos
       setAllNews([

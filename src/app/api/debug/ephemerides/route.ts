@@ -43,10 +43,6 @@ export async function GET(request: NextRequest) {
     yesterday.setDate(yesterday.getDate() - 1)
     const yesterdayString = yesterday.toISOString().split('T')[0]
 
-    console.log('🔍 Debug: Buscando efemérides recientes...')
-    console.log('📅 Hoy:', todayString)
-    console.log('📅 Ayer:', yesterdayString)
-
     // Buscar efemérides de los últimos 3 días
     const { data: recentData, error: recentError } = await supabase
       .from('ephemerides')

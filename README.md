@@ -42,7 +42,7 @@ Abre http://localhost:3000
 - **Backend**: Supabase (PostgreSQL), DeepSeek AI, Open-Meteo, Medium RSS
 - **Deploy**: Vercel, GitHub Actions
 
-## � Variables de Entorno
+## 🎡 Variables de Entorno
 
 ```env
 # IA (opcional - funciona con fallback)
